@@ -7,7 +7,9 @@ import de.tuberlin.sese.swtpp.gameserver.model.*;
 import java.io.Serializable;
 
 public class XiangqiGame extends Game implements Serializable{
+	
 
+	
 	/**
 	 *
 	 */
@@ -20,6 +22,8 @@ public class XiangqiGame extends Game implements Serializable{
 	// just for better comprehensibility of the code: assign red and black player
 	private Player blackPlayer;
 	private Player redPlayer;
+	private String board;
+	private String[] boardRows;
 
 	// internal representation of the game state
 	// TODO: insert additional game data here
@@ -30,6 +34,8 @@ public class XiangqiGame extends Game implements Serializable{
 
 	public XiangqiGame() {
 		super();
+		this.board = "rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR";
+		this.boardRows = getBoardRows();
 
 		// TODO: initialization of game state can go here
 	}
@@ -100,7 +106,7 @@ public class XiangqiGame extends Game implements Serializable{
 
 	@Override
 	public String nextPlayerString() {
-		return isRedNext() ? "w" : "b";
+		return isRedNext() ? "r" : "b";
 	}
 
 	@Override
@@ -211,14 +217,63 @@ public class XiangqiGame extends Game implements Serializable{
 	@Override
 	public String getBoard() {
 		// TODO: implement
-		return "rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR";
+		//return "rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR";
+		return this.board;
 	}
+	
+	public String[] getBoardRows() {
+		return this.board.split("/");
+	}
+	
+	public Figures getFigureFromField(String field,String playerColor)
+	{
+		Pair p = getFieldValue(field);
+		char f = boardRows[p.x].charAt(p.y);
+		Figures fig = new Figures(" ",' ');
+		switch(Character.toLowerCase(f)) {
+			case 'g': fig = new General(playerColor);break; 
+			case 'a': fig = new Advisor(playerColor);break;
+			case 'e': fig = new Elephant(playerColor);break;
+			case 'h': fig = new Horse(playerColor);break;
+			case 'r': fig = new Rook(playerColor);break;
+			case 'c': fig = new Cannon(playerColor);break;
+			case 's': fig = new Soldier(playerColor);break;
+		}
+		return fig; 
+	}
+	
+	public Pair getFieldValue(String field)
+	{ 
+		Pair p = new Pair(field.charAt(0)- 97,Integer.parseInt(String.valueOf(field.charAt(1))));
+		return p;	
+	}
+	
+	public Pair pop(Pair s, Pair e)
+	{
+		return new Pair(Math.abs(s.x - s.x),Math.abs(e.y - e.y));
+	}
+
+	public String getPlayerColor(Player player){
+		if(player.equals(redPlayer)){
+			return "red";
+		}
+		return "black";
+	}
+	
 
 	@Override
 	public boolean tryMove(String moveString, Player player) {
 		// TODO: implement
-
-		return false;
+		String[] fields = moveString.split("-");
+		String playerColor = getPlayerColor(player);
+		Figures figure = getFigureFromField(fields[0],playerColor);
+		Points p = new Points(getFieldValue(fields[0]),getFieldValue(fields[1]));
+		boolean valid = figure.isValidMove(p, this.board);
+		if(valid)
+		{
+			this.board = figure.applyMove(p, board);
+		}
+		return valid;
 	}
 
 }
