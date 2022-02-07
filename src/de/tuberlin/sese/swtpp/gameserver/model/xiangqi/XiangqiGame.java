@@ -5,6 +5,7 @@ import de.tuberlin.sese.swtpp.gameserver.model.*;
 
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class XiangqiGame extends Game implements Serializable{
 	
@@ -20,10 +21,10 @@ public class XiangqiGame extends Game implements Serializable{
 	 ***********************/
 
 	// just for better comprehensibility of the code: assign red and black player
-	private Player blackPlayer;
-	private Player redPlayer;
-	private String board;
-	private String[] boardRows;
+	public Player blackPlayer;
+	public Player redPlayer;
+	public String board;
+	public String[] boardRows;
 
 	// internal representation of the game state
 	// TODO: insert additional game data here
@@ -212,6 +213,7 @@ public class XiangqiGame extends Game implements Serializable{
 		// Note: This method is for automatic testing. A regular game would not start at some artificial state.
 		//       It can be assumed that the state supplied is a regular board that can be reached during a game.
 		// TODO: implement
+		this.board = state;
 	}
 
 	@Override
@@ -228,7 +230,7 @@ public class XiangqiGame extends Game implements Serializable{
 	public Figures getFigureFromField(String field,String playerColor)
 	{
 		Pair p = getFieldValue(field);
-		char f = boardRows[p.x].charAt(p.y);
+		char f = boardRows[p.y].charAt(p.x);
 		Figures fig = new Figures(" ",' ');
 		switch(Character.toLowerCase(f)) {
 			case 'g': fig = new General(playerColor);break; 
@@ -238,6 +240,7 @@ public class XiangqiGame extends Game implements Serializable{
 			case 'r': fig = new Rook(playerColor);break;
 			case 'c': fig = new Cannon(playerColor);break;
 			case 's': fig = new Soldier(playerColor);break;
+			default: fig = new Figures("null",'n');break;
 		}
 		return fig; 
 	}
@@ -247,11 +250,6 @@ public class XiangqiGame extends Game implements Serializable{
 		Pair p = new Pair(field.charAt(0)- 97,Integer.parseInt(String.valueOf(field.charAt(1))));
 		return p;	
 	}
-	
-	public Pair pop(Pair s, Pair e)
-	{
-		return new Pair(Math.abs(s.x - s.x),Math.abs(e.y - e.y));
-	}
 
 	public String getPlayerColor(Player player){
 		if(player.equals(redPlayer)){
@@ -260,10 +258,31 @@ public class XiangqiGame extends Game implements Serializable{
 		return "black";
 	}
 	
+	public boolean validateMoveString(String moveString)
+	{
+		if(moveString.length() != 5) return false;
+		char[] msLetter = moveString.toCharArray();
+		boolean[] conditions = {
+				(msLetter[0] > 96 && msLetter[0] < 106),
+				(msLetter[1] > 47 && msLetter[1] < 57),
+				(msLetter[2] == 45),
+				(msLetter[3] > 96 && msLetter[3] < 106),
+				(msLetter[4] > 47 && msLetter[4] < 57)};
+		for(int i=0;i<conditions.length;i++)
+		{
+			if(!conditions[i])
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
 
 	@Override
 	public boolean tryMove(String moveString, Player player) {
 		// TODO: implement
+		if(!validateMoveString(moveString)) return false;
 		String[] fields = moveString.split("-");
 		String playerColor = getPlayerColor(player);
 		Figures figure = getFigureFromField(fields[0],playerColor);

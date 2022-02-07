@@ -75,13 +75,13 @@ public class GameController implements Serializable {
      */
     public int startGame(final User u, final String bots, final String type) throws Exception {
 
-        System.out.println("start game " + type + " with " + bots);
+        //System.out.println("start game " + type + " with " + bots);
 
         Game newGame = GameFactory.createGame(type);
 
-        System.out.println("game id " + newGame.getGameID() +
-                " type " + newGame.getType() +
-                " " + newGame.getClass().getName());
+        //System.out.println("game id " + newGame.getGameID() +
+        //        " type " + newGame.getType() +
+        //        " " + newGame.getClass().getName());
 
         Player p = new Player(u, newGame);
         u.addParticipation(p);
