@@ -1,11 +1,34 @@
 package de.tuberlin.sese.swtpp.gameserver.model.xiangqi;
 
+import java.util.*;
+
 public class Figures {
 	String player;
 	Character identifier;
 	public Figures(String p,char i){
 		this.player = p;
-		this.identifier = Character.toLowerCase(i);
+		if(this.player.equals("black"))
+		{
+			Character.toUpperCase(i);
+		}
+		this.identifier = i;
+	}
+	
+	public boolean charIsFigure(char val) {
+		char[] figChars = {'g','a','e','h','r','c','s'};
+		return Arrays.asList(figChars).contains(Character.toLowerCase(val));
+	}
+	
+	public String getBoardCollumn(String board, int col)
+	{
+		String[] rows = board.split("/");
+		char[] column = new char[rows.length];
+		int counter = 0;
+		for(String r:rows){
+			column[counter] = (this.expandRow(new StringBuilder(r))).charAt(col);
+			counter++;
+		}		
+		return String.valueOf(column);
 	}
 	
 	public String getPlayer()
@@ -26,18 +49,26 @@ public class Figures {
 	public String applyMove(Points p, String board)
 	{		
 	  String[] rows = board.split("/");
-	  StringBuilder startRow = new StringBuilder(expandRow(new StringBuilder(rows[p.s.y])));
-	  StringBuilder endRow = new StringBuilder(expandRow(new StringBuilder(rows[p.e.y])));
-	  char stone = startRow.charAt(p.s.x);
-	  startRow.setCharAt(p.s.x,'1');
-	  endRow.setCharAt(p.e.x,stone);
-	  rows[p.s.y] = collapseRow(new StringBuilder(startRow)).toString();
-	  rows[p.e.y] = collapseRow(new StringBuilder(endRow)).toString();
+	  if(p.s.y == p.e.y){
+		  StringBuilder diffRow = new StringBuilder(expandRow(new StringBuilder(rows[9-p.e.y])));
+		  char stone = diffRow.charAt(p.s.x);
+		  diffRow.setCharAt(p.s.x,'1');
+		  diffRow.setCharAt(p.e.x,stone);
+		  rows[9-p.e.y] = collapseRow(new StringBuilder(diffRow)).toString();
+	  }else{
+		  StringBuilder startRow = new StringBuilder(expandRow(new StringBuilder(rows[9-p.s.y])));
+		  StringBuilder endRow = new StringBuilder(expandRow(new StringBuilder(rows[9-p.e.y])));
+		  char stone = startRow.charAt(p.s.x);
+		  startRow.setCharAt(p.s.x,'1');
+		  endRow.setCharAt(p.e.x,stone);
+		  rows[9-p.s.y] = collapseRow(new StringBuilder(startRow)).toString();
+		  rows[9-p.e.y] = collapseRow(new StringBuilder(endRow)).toString();
+	  }
 	  String returnBoard =String.join("/",rows);
 	  return returnBoard;
 	}
 
-	public StringBuilder expandRow(StringBuilder row)
+	public String expandRow(StringBuilder row)
     {
     StringBuilder ret = new StringBuilder();
      for(char c:row.toString().toCharArray())
@@ -55,10 +86,10 @@ public class Figures {
               ret.append(c);
           }
       }
-	return ret;
+	return ret.toString();
     }
     
-    public StringBuilder collapseRow(StringBuilder row)
+    public String collapseRow(StringBuilder row)
     {
     StringBuilder ret = new StringBuilder();
     int count = 0;
@@ -86,6 +117,14 @@ public class Figures {
         char countC = (char)(count+48);
         ret.append(countC);  
       }
-	return ret;
+	return ret.toString();
+    }
+    
+    public boolean ownFigure(char fig) {
+    	if(!Character.isDigit(fig)){
+    		if(Character.isLowerCase(this.identifier)){
+        		if(Character.isLowerCase(fig))return true;
+        	}else{if(Character.isUpperCase(fig))return true;}}
+    	return false;
     }
 }

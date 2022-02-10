@@ -8,12 +8,27 @@ public class Soldier extends Figures{
 	
 	@Override
 	public boolean isValidMove(Points p,String board){
-		boolean valid = false; 
 		Pair dif = new Pair(0,0);
 		dif = p.absDifference();
-		if(player.equals("red") &&(p.s.x < 5 && dif.y != 0)) return false;
-		else{if(p.s.x > 4 && dif.y != 0) return false;}
-		if((dif.x == 1 && dif.y == 0) || (dif.x == 0 && dif.y == 1)) return true;
-		return false;
+		if(this.getPlayer().equals("red")){
+			if(p.s.y >= 5)
+			{
+				if((dif.x == 1 && dif.y == 0) || (dif.x == 0 && dif.y == 1)) return true;
+			}
+			else{
+				if(dif.x == 1 && dif.y == 0) {return false;}
+				else if((dif.x == 0 && dif.y == 1)) {return true;}
+			}
+		}
+		else{
+			if(p.s.y < 5){
+				if((dif.x == 1 && dif.y == 0) || (dif.x == 0 && dif.y == 1)) return true;
+			}
+			else
+			{
+				if(dif.x == 1 && dif.y == 0) {return false;}
+				else if((dif.x == 0 && dif.y == 1)){return true;}
+			}
+		}return false;
 	}
 }

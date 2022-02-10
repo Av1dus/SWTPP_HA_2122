@@ -2,12 +2,11 @@ package de.tuberlin.sese.swtpp.gameserver.model.xiangqi;
 
 public class Advisor extends Figures{
 	public Advisor(String p) {
-		super(p, 's');
+		super(p, 'a');
 	}
 	
 	@Override
 	public boolean isValidMove(Points p,String board){
-		boolean valid = false; 
 		Pair dif = new Pair(0,0);
 		dif = p.absDifference();
 		if(player.equals("red") &&(p.s.x < 5 && dif.y != 0)) return false;

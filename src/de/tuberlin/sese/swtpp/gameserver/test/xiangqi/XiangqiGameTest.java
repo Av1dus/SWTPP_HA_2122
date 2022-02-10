@@ -208,19 +208,8 @@ public final class XiangqiGameTest {
 		assertTrue(red.equals(game.getPlayerColor(game.redPlayer)));
 		assertTrue(black.equals(game.getPlayerColor(game.blackPlayer)));
 	}
+
 	
-	@Test
-	public void testGetBoardRows()
-	{
-		String defaultBoard = "rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR";
-		game.setBoard(defaultBoard);
-		String [] boardRows = {"rheagaehr","9","1c5c1","s1s1s1s1s","9","9","S1S1S1S1S","1C5C1","9","RHEAGAEHR"};
-		assertEquals(boardRows.length,game.boardRows.length);
-		for(int i=0;i<boardRows.length;i++)
-		{
-			assertTrue(boardRows[i].equals(game.boardRows[i]));
-		}
-	}
 	@Test
 	public void testValidateMoveString()
 	{

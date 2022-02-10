@@ -1,5 +1,4 @@
 package de.tuberlin.sese.swtpp.gameserver.test.xiangqi;
-import de.tuberlin.sese.swtpp.gameserver.model.*;
 import de.tuberlin.sese.swtpp.gameserver.model.xiangqi.Figures;
 import de.tuberlin.sese.swtpp.gameserver.model.xiangqi.Pair;
 import de.tuberlin.sese.swtpp.gameserver.model.xiangqi.Points;

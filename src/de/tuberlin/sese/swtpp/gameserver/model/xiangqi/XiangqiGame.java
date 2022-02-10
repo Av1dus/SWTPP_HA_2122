@@ -5,8 +5,6 @@ import de.tuberlin.sese.swtpp.gameserver.model.*;
 
 
 import java.io.Serializable;
-import java.util.Arrays;
-
 public class XiangqiGame extends Game implements Serializable{
 	
 
@@ -35,6 +33,7 @@ public class XiangqiGame extends Game implements Serializable{
 
 	public XiangqiGame() {
 		super();
+		//this.board = "RHEAGAEHR/9/1C5C1/S1S1S1S1S/9/9/s1s1s1s1s/1c5c1/9/rheagaehr";
 		this.board = "rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR";
 		this.boardRows = getBoardRows();
 
@@ -224,14 +223,24 @@ public class XiangqiGame extends Game implements Serializable{
 	}
 	
 	public String[] getBoardRows() {
-		return this.board.split("/");
+		Figures fig = new Figures("null",'n');
+		String[] rows = this.board.split("/");
+		for(int i=0;i<rows.length;i++)
+		{
+			rows[i] = fig.expandRow(new StringBuilder(rows[i])).toString();
+		}
+		return rows;
+	}
+	
+	public void updateBoardRows() {
+		this.boardRows = getBoardRows();
 	}
 	
 	public Figures getFigureFromField(String field,String playerColor)
 	{
-		Pair p = getFieldValue(field);
-		char f = boardRows[p.y].charAt(p.x);
-		Figures fig = new Figures(" ",' ');
+		Pair p = getFieldValue(field);		
+		char f = boardRows[9-p.y].charAt(p.x);
+		Figures fig;
 		switch(Character.toLowerCase(f)) {
 			case 'g': fig = new General(playerColor);break; 
 			case 'a': fig = new Advisor(playerColor);break;
@@ -288,9 +297,11 @@ public class XiangqiGame extends Game implements Serializable{
 		Figures figure = getFigureFromField(fields[0],playerColor);
 		Points p = new Points(getFieldValue(fields[0]),getFieldValue(fields[1]));
 		boolean valid = figure.isValidMove(p, this.board);
+		System.out.println("tryMove is valid? "+valid);
 		if(valid)
 		{
 			this.board = figure.applyMove(p, board);
+			updateBoardRows();
 		}
 		return valid;
 	}
