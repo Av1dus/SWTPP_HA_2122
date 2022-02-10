@@ -273,14 +273,14 @@ public class XiangqiGame extends Game implements Serializable{
 		char[] msLetter = moveString.toCharArray();
 		boolean[] conditions = {
 				(msLetter[0] > 96 && msLetter[0] < 106),
-				(msLetter[1] > 47 && msLetter[1] < 57),
+				(msLetter[1] > 47 && msLetter[1] < 58),
 				(msLetter[2] == 45),
 				(msLetter[3] > 96 && msLetter[3] < 106),
-				(msLetter[4] > 47 && msLetter[4] < 57)};
+				(msLetter[4] > 47 && msLetter[4] < 58)};
 		for(int i=0;i<conditions.length;i++)
 		{
 			if(!conditions[i])
-			{
+			{	
 				return false;
 			}
 		}
@@ -291,6 +291,7 @@ public class XiangqiGame extends Game implements Serializable{
 	@Override
 	public boolean tryMove(String moveString, Player player) {
 		// TODO: implement
+		System.out.println(moveString);
 		if(!validateMoveString(moveString)) return false;
 		String[] fields = moveString.split("-");
 		String playerColor = getPlayerColor(player);

@@ -18,7 +18,7 @@ public class Rook extends Figures{
 			if(p.e.y < p.s.y){
 				p.reverse();
 				reversed = true;			}
-			for(int i= 9-p.s.y+1;i<=9-p.e.y;i++)if(Character.isDigit(column.charAt(i)) == false)return false;
+			for(int i= 9-p.s.y+1;i<9-p.e.y;i++)if(Character.isDigit(column.charAt(i)) == false)return false;
 			if(reversed){
 				if(this.ownFigure(column.charAt(9-p.s.y))){
 						p.reverse();
