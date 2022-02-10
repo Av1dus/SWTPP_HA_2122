@@ -303,6 +303,17 @@ public class XiangqiGame extends Game implements Serializable{
 		{
 			this.board = figure.applyMove(p, board);
 			updateBoardRows();
+			/* WORKING FOR CHANGING PLAYER TURN,
+			 * COMMENTED FOR TESTING.
+			if(player == this.redPlayer)
+			{
+				nextPlayer = this.blackPlayer;
+			}
+			else
+			{
+				nextPlayer = this.redPlayer;
+			}
+			*/
 		}
 		return valid;
 	}

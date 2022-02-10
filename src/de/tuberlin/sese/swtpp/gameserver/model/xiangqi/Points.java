@@ -2,10 +2,10 @@ package de.tuberlin.sese.swtpp.gameserver.model.xiangqi;
 
 public class Points{ 
 	  public Pair s; 
-	  public Pair e; 
+	  public Pair e;
 	  public Points(Pair s, Pair e) { 
 	    this.s = s; 
-	    this.e = e; 
+	    this.e = e;
 	  }
 	  public Pair difference() {
 		 return new Pair(this.e.x-this.s.x,this.e.y-this.s.y);

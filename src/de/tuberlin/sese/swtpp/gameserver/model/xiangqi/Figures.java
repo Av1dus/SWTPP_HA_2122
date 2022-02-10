@@ -31,15 +31,9 @@ public class Figures {
 		return String.valueOf(column);
 	}
 	
-	public String getPlayer()
-	{
-		return this.player;
-	}
+	public String getPlayer() {return this.player;	}
 	
-	public Character getIdentifier()
-	{
-		return this.identifier;
-	}
+	public Character getIdentifier(){ return this.identifier;}
 	
 	public boolean isValidMove(Points p,String board)
 	{
@@ -126,5 +120,10 @@ public class Figures {
         		if(Character.isLowerCase(fig))return true;
         	}else{if(Character.isUpperCase(fig))return true;}}
     	return false;
+    }
+    
+    public char getFieldValue(Pair p,String board)
+    {	
+    	return this.expandRow(new StringBuilder(board.split("/")[9-p.y])).charAt(p.x);
     }
 }
