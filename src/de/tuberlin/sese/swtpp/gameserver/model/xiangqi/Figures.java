@@ -7,9 +7,9 @@ public class Figures {
 	Character identifier;
 	public Figures(String p,char i){
 		this.player = p;
-		if(this.player.equals("black"))
+		if(this.player.equals("red"))
 		{
-			Character.toUpperCase(i);
+			i = Character.toUpperCase(i);
 		}
 		this.identifier = i;
 	}
@@ -55,8 +55,8 @@ public class Figures {
 		  char stone = startRow.charAt(p.s.x);
 		  startRow.setCharAt(p.s.x,'1');
 		  endRow.setCharAt(p.e.x,stone);
-		  rows[9-p.s.y] = collapseRow(new StringBuilder(startRow)).toString();
-		  rows[9-p.e.y] = collapseRow(new StringBuilder(endRow)).toString();
+		  //rows[9-p.s.y] = collapseRow(new StringBuilder(startRow)).toString();
+		  //rows[9-p.e.y] = collapseRow(new StringBuilder(endRow)).toString();
 	  }
 	  String returnBoard =String.join("/",rows);
 	  return returnBoard;

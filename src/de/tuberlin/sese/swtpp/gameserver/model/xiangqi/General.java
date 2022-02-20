@@ -3,7 +3,7 @@ package de.tuberlin.sese.swtpp.gameserver.model.xiangqi;
 public class General extends Figures{
 
 	public General(String p) {
-		super(p, 's');
+		super(p, 'g');
 	}
 	
 	@Override

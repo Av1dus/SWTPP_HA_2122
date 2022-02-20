@@ -1,5 +1,4 @@
 package de.tuberlin.sese.swtpp.gameserver.model.xiangqi;
-
 import de.tuberlin.sese.swtpp.gameserver.model.*;
 //TODO: more imports from JVM allowed here
 
@@ -261,7 +260,7 @@ public class XiangqiGame extends Game implements Serializable{
 	}
 
 	public String getPlayerColor(Player player){
-		if(player.equals(redPlayer)){
+		if(player == redPlayer){
 			return "red";
 		}
 		return "black";
@@ -287,24 +286,40 @@ public class XiangqiGame extends Game implements Serializable{
 		return true;
 	}
 	
+	
+	
 
 	@Override
 	public boolean tryMove(String moveString, Player player) {
 		// TODO: implement
-		System.out.println(moveString);
+		String color = "";
+		if(player == this.redPlayer) color = "red";
+		else color = "black";
+		System.out.println(color);
+		//MoveBoard internalBoard = new MoveBoard(this.board, color, this.boardRows);
+		//this.board = internalBoard.representation;
+		
+		
 		if(!validateMoveString(moveString)) return false;
 		String[] fields = moveString.split("-");
-		String playerColor = getPlayerColor(player);
-		Figures figure = getFigureFromField(fields[0],playerColor);
+		Figures figure = getFigureFromField(fields[0],color);		
+		Figures endFig = getFigureFromField(fields[1],color);
+		System.out.println(figure.identifier);
+		if(color == "red" && Character.isLowerCase(figure.identifier)) return false;
+		if(color == "black" && Character.isUpperCase(figure.identifier)) return false;
+		
 		Points p = new Points(getFieldValue(fields[0]),getFieldValue(fields[1]));
 		boolean valid = figure.isValidMove(p, this.board);
 		System.out.println("tryMove is valid? "+valid);
 		if(valid)
 		{
-			this.board = figure.applyMove(p, board);
-			updateBoardRows();
-			/* WORKING FOR CHANGING PLAYER TURN,
-			 * COMMENTED FOR TESTING.
+			//internalBoard.representation = figure.applyMove(p, internalBoard.representation);
+			this.board = figure.applyMove(p,this.board);
+			//System.out.println(internalBoard.representation);
+			
+			//updateBoardRows();
+			//WORKING FOR CHANGING PLAYER TURN,
+			//COMMENTED FOR TESTING.
 			if(player == this.redPlayer)
 			{
 				nextPlayer = this.blackPlayer;
@@ -313,8 +328,12 @@ public class XiangqiGame extends Game implements Serializable{
 			{
 				nextPlayer = this.redPlayer;
 			}
-			*/
+			//
+			
 		}
+		//this.board = internalBoard.toMainBoard();
+		updateBoardRows();
+		
 		return valid;
 	}
 
