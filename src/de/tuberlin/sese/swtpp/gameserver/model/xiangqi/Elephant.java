@@ -8,22 +8,24 @@ public class Elephant extends Figures {
 	@Override
 	public boolean isValidMove(Points p, String board) {
 		Pair dif = p.absDifference();
-		if (dif.x != 2 && dif.y != 2)
-			return false;
 		Pair middle = this.meanField(p);
+		char middleFieldValue = this.getFieldValue(middle, board);
+
 		System.out.println(middle.toString());
-		char value = this.getFieldValue(middle, board);
-		char end = this.getFieldValue(p.e, board);
-		System.out.println(value);
-		System.out.println(this.charIsFigure(value));
-		if (this.charIsFigure(value))
+		System.out.println(middleFieldValue + " -> " + this.charIsFigure(middleFieldValue));
+		
+		if (dif.x != 2 && dif.y != 2 && this.ownFigure(this.getFieldValue(p.e, board)))
 			return false;
-		if (this.ownFigure(end))
+		
+		if (!Character.isDigit(middleFieldValue))
 			return false;
-		System.out.println((p.e.y > 4));
-		if (p.e.y > 4)
+		
+		if (this.player.equals("red") && p.e.y > 4)
 			return false;
-		return true;
+		else if (this.player.equals("black") && p.e.y < 5)
+			return false;
+		else
+			return true;
 	}
 
 	public Pair meanField(Points p) {

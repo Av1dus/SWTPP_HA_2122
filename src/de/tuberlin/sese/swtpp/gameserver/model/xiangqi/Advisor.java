@@ -5,19 +5,23 @@ public class Advisor extends Figures {
 		super(p, 'a');
 	}
 
+	private boolean isInBound(Pair target) {
+		if (this.player == "red") // Red
+			return target.y < 3 && target.x > 2 && target.x < 6;
+		else if (this.player == "black") // Black
+			return target.y > 6 && target.x > 2 && target.x < 6;
+		else
+			return false;
+	}
+	
 	@Override
 	public boolean isValidMove(Points p, String board) {
-		Pair dif = new Pair(0, 0);
-		dif = p.absDifference();
-		if ((p.s.x < 5 && dif.y != 0))
+		Pair dif = p.absDifference();
+		
+		if (dif.x != 1 && dif.y != 1 || this.ownFigure(this.getFieldValue(p.e, board)))
 			return false;
-		else {
-			if (p.s.x > 4 && dif.y != 0)
-				return false;
-		}
-		if ((dif.x == 1 && dif.y == 0) || (dif.x == 0 && dif.y == 1))
-			return true;
-		return false;
+		else
+			return this.isInBound(p.e);
 	}
 
 }

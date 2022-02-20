@@ -18,7 +18,7 @@ public class Cannon extends Figures {
 			line = this.getBoardCollumn(board, p.s.x);
 			dir = 'y';
 		}
-		char targetField = line.charAt(p.e.y);
+		char targetField = this.getFieldValue(p.e, board);
 		line = line.substring(p.min(dir) + 1, p.max(dir));
 		System.out.println(!this.ownFigure(targetField));
 		System.out.println(this.identifier);

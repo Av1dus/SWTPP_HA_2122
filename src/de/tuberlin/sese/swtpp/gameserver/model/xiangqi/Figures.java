@@ -8,9 +8,13 @@ public class Figures {
 
 	public Figures(String p, char i) {
 		this.player = p;
+		
 		if (this.player.equals("red")) {
 			i = Character.toUpperCase(i);
+		} else if ( this.player.equals("black") ) {
+			i = Character.toLowerCase(i);
 		}
+		
 		this.identifier = i;
 	}
 
@@ -56,8 +60,8 @@ public class Figures {
 			char stone = startRow.charAt(p.s.x);
 			startRow.setCharAt(p.s.x, '1');
 			endRow.setCharAt(p.e.x, stone);
-			// rows[9-p.s.y] = collapseRow(new StringBuilder(startRow)).toString();
-			// rows[9-p.e.y] = collapseRow(new StringBuilder(endRow)).toString();
+			rows[9 - p.s.y] = collapseRow(new StringBuilder(startRow)).toString();
+			rows[9 - p.e.y] = collapseRow(new StringBuilder(endRow)).toString();
 		}
 		String returnBoard = String.join("/", rows);
 		return returnBoard;
@@ -103,16 +107,21 @@ public class Figures {
 	}
 
 	public boolean ownFigure(char fig) {
-		if (!Character.isDigit(fig)) {
-			if (Character.isLowerCase(this.identifier)) {
-				if (Character.isLowerCase(fig))
-					return true;
-			} else {
-				if (Character.isUpperCase(fig))
-					return true;
-			}
-		}
-		return false;
+		boolean both_red = Character.isLowerCase(this.identifier) && Character.isLowerCase(fig);
+		boolean both_black = Character.isUpperCase(this.identifier) && Character.isUpperCase(fig);
+		
+		return !Character.isDigit(fig) && (both_red ^ both_black); // ^ == exclusive-or
+
+		// if (!Character.isDigit(fig)) {
+		// if (Character.isLowerCase(this.identifier)) {
+		// if (Character.isLowerCase(fig))
+		// return true;
+		// } else {
+		// if (Character.isUpperCase(fig))
+		// return true;
+		// }
+		// }
+		// return false;
 	}
 
 	public char getFieldValue(Pair p, String board) {
