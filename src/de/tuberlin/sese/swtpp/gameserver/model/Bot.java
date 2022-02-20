@@ -5,12 +5,12 @@ package de.tuberlin.sese.swtpp.gameserver.model;
  * bots from other users. Work has to be done by concrete bot implementations.
  */
 public abstract class Bot extends User {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 6451276549161911816L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 6451276549161911816L;
 
-    public Bot(String name) {
-        super(name, name);
-    }
+	public Bot(String name) {
+		super(name, name);
+	}
 }

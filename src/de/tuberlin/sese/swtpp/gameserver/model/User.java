@@ -3,6 +3,7 @@ package de.tuberlin.sese.swtpp.gameserver.model;
 import java.io.Serializable;
 import java.util.LinkedList;
 
+
 /**
  * This class represents all properties associated with a user in the system.
  * Games are linked via player objects, which hold information of a user
@@ -104,7 +105,7 @@ public class User implements Serializable {
 	}
 
 	public void updateStatistics() {
-		int nbTotal=0, nbWon=0, nbLost=0,nbDraw = 0;
+		int nbTotal = 0, nbWon = 0, nbLost = 0, nbDraw = 0;
 		int moves = 0;
 
 		for (Player p : history) {

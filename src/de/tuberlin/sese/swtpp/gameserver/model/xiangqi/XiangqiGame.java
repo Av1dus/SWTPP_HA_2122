@@ -1,13 +1,12 @@
 package de.tuberlin.sese.swtpp.gameserver.model.xiangqi;
+
 import de.tuberlin.sese.swtpp.gameserver.model.*;
 //TODO: more imports from JVM allowed here
 
-
 import java.io.Serializable;
-public class XiangqiGame extends Game implements Serializable{
-	
 
-	
+public class XiangqiGame extends Game implements Serializable {
+
 	/**
 	 *
 	 */
@@ -32,7 +31,7 @@ public class XiangqiGame extends Game implements Serializable{
 
 	public XiangqiGame() {
 		super();
-		//this.board = "RHEAGAEHR/9/1C5C1/S1S1S1S1S/9/9/s1s1s1s1s/1c5c1/9/rheagaehr";
+		// this.board = "RHEAGAEHR/9/1C5C1/S1S1S1S1S/9/9/s1s1s1s1s/1c5c1/9/rheagaehr";
 		this.board = "rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR";
 		this.boardRows = getBoardRows();
 
@@ -56,7 +55,7 @@ public class XiangqiGame extends Game implements Serializable{
 			if (players.size() == 2) {
 				started = true;
 				this.redPlayer = players.get(0);
-				this.blackPlayer= players.get(1);
+				this.blackPlayer = players.get(1);
 				nextPlayer = redPlayer;
 			}
 			return true;
@@ -157,9 +156,9 @@ public class XiangqiGame extends Game implements Serializable{
 		return false;
 	}
 
-	/* ******************************************
-	 * Helpful stuff
-	 ***************************************** */
+	/*
+	 * ****************************************** Helpful stuff
+	 */
 
 	/**
 	 *
@@ -208,8 +207,10 @@ public class XiangqiGame extends Game implements Serializable{
 
 	@Override
 	public void setBoard(String state) {
-		// Note: This method is for automatic testing. A regular game would not start at some artificial state.
-		//       It can be assumed that the state supplied is a regular board that can be reached during a game.
+		// Note: This method is for automatic testing. A regular game would not start at
+		// some artificial state.
+		// It can be assumed that the state supplied is a regular board that can be
+		// reached during a game.
 		// TODO: implement
 		this.board = state;
 	}
@@ -217,123 +218,128 @@ public class XiangqiGame extends Game implements Serializable{
 	@Override
 	public String getBoard() {
 		// TODO: implement
-		//return "rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR";
+		// return "rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR";
 		return this.board;
 	}
-	
+
 	public String[] getBoardRows() {
-		Figures fig = new Figures("null",'n');
+		Figures fig = new Figures("null", 'n');
 		String[] rows = this.board.split("/");
-		for(int i=0;i<rows.length;i++)
-		{
+		for (int i = 0; i < rows.length; i++) {
 			rows[i] = fig.expandRow(new StringBuilder(rows[i])).toString();
 		}
 		return rows;
 	}
-	
+
 	public void updateBoardRows() {
 		this.boardRows = getBoardRows();
 	}
-	
-	public Figures getFigureFromField(String field,String playerColor)
-	{
-		Pair p = getFieldValue(field);		
-		char f = boardRows[9-p.y].charAt(p.x);
+
+	public Figures getFigureFromField(String field, String playerColor) {
+		Pair p = getFieldValue(field);
+		char f = boardRows[9 - p.y].charAt(p.x);
 		Figures fig;
-		switch(Character.toLowerCase(f)) {
-			case 'g': fig = new General(playerColor);break; 
-			case 'a': fig = new Advisor(playerColor);break;
-			case 'e': fig = new Elephant(playerColor);break;
-			case 'h': fig = new Horse(playerColor);break;
-			case 'r': fig = new Rook(playerColor);break;
-			case 'c': fig = new Cannon(playerColor);break;
-			case 's': fig = new Soldier(playerColor);break;
-			default: fig = new Figures("null",'n');break;
+		switch (Character.toLowerCase(f)) {
+		case 'g':
+			fig = new General(playerColor);
+			break;
+		case 'a':
+			fig = new Advisor(playerColor);
+			break;
+		case 'e':
+			fig = new Elephant(playerColor);
+			break;
+		case 'h':
+			fig = new Horse(playerColor);
+			break;
+		case 'r':
+			fig = new Rook(playerColor);
+			break;
+		case 'c':
+			fig = new Cannon(playerColor);
+			break;
+		case 's':
+			fig = new Soldier(playerColor);
+			break;
+		default:
+			fig = new Figures("null", 'n');
+			break;
 		}
-		return fig; 
-	}
-	
-	public Pair getFieldValue(String field)
-	{ 
-		Pair p = new Pair(field.charAt(0)- 97,Integer.parseInt(String.valueOf(field.charAt(1))));
-		return p;	
+		return fig;
 	}
 
-	public String getPlayerColor(Player player){
-		if(player == redPlayer){
+	public Pair getFieldValue(String field) {
+		Pair p = new Pair(field.charAt(0) - 97, Integer.parseInt(String.valueOf(field.charAt(1))));
+		return p;
+	}
+
+	public String getPlayerColor(Player player) {
+		if (player == redPlayer) {
 			return "red";
 		}
 		return "black";
 	}
-	
-	public boolean validateMoveString(String moveString)
-	{
-		if(moveString.length() != 5) return false;
+
+	public boolean validateMoveString(String moveString) {
+		if (moveString.length() != 5)
+			return false;
 		char[] msLetter = moveString.toCharArray();
-		boolean[] conditions = {
-				(msLetter[0] > 96 && msLetter[0] < 106),
-				(msLetter[1] > 47 && msLetter[1] < 58),
-				(msLetter[2] == 45),
-				(msLetter[3] > 96 && msLetter[3] < 106),
-				(msLetter[4] > 47 && msLetter[4] < 58)};
-		for(int i=0;i<conditions.length;i++)
-		{
-			if(!conditions[i])
-			{	
+		boolean[] conditions = { (msLetter[0] > 96 && msLetter[0] < 106), (msLetter[1] > 47 && msLetter[1] < 58),
+				(msLetter[2] == 45), (msLetter[3] > 96 && msLetter[3] < 106), (msLetter[4] > 47 && msLetter[4] < 58) };
+		for (int i = 0; i < conditions.length; i++) {
+			if (!conditions[i]) {
 				return false;
 			}
 		}
 		return true;
 	}
-	
-	
-	
 
 	@Override
 	public boolean tryMove(String moveString, Player player) {
 		// TODO: implement
 		String color = "";
-		if(player == this.redPlayer) color = "red";
-		else color = "black";
+		if (player == this.redPlayer)
+			color = "red";
+		else
+			color = "black";
 		System.out.println(color);
-		//MoveBoard internalBoard = new MoveBoard(this.board, color, this.boardRows);
-		//this.board = internalBoard.representation;
-		
-		
-		if(!validateMoveString(moveString)) return false;
+		// MoveBoard internalBoard = new MoveBoard(this.board, color, this.boardRows);
+		// this.board = internalBoard.representation;
+
+		if (!validateMoveString(moveString))
+			return false;
 		String[] fields = moveString.split("-");
-		Figures figure = getFigureFromField(fields[0],color);		
-		Figures endFig = getFigureFromField(fields[1],color);
+		Figures figure = getFigureFromField(fields[0], color);
+		Figures endFig = getFigureFromField(fields[1], color);
 		System.out.println(figure.identifier);
-		if(color == "red" && Character.isLowerCase(figure.identifier)) return false;
-		if(color == "black" && Character.isUpperCase(figure.identifier)) return false;
-		
-		Points p = new Points(getFieldValue(fields[0]),getFieldValue(fields[1]));
+		if (color == "red" && Character.isLowerCase(figure.identifier))
+			return false;
+		if (color == "black" && Character.isUpperCase(figure.identifier))
+			return false;
+
+		Points p = new Points(getFieldValue(fields[0]), getFieldValue(fields[1]));
 		boolean valid = figure.isValidMove(p, this.board);
-		System.out.println("tryMove is valid? "+valid);
-		if(valid)
-		{
-			//internalBoard.representation = figure.applyMove(p, internalBoard.representation);
-			this.board = figure.applyMove(p,this.board);
-			//System.out.println(internalBoard.representation);
-			
-			//updateBoardRows();
-			//WORKING FOR CHANGING PLAYER TURN,
-			//COMMENTED FOR TESTING.
-			if(player == this.redPlayer)
-			{
+		System.out.println("tryMove is valid? " + valid);
+		if (valid) {
+			// internalBoard.representation = figure.applyMove(p,
+			// internalBoard.representation);
+			this.board = figure.applyMove(p, this.board);
+			// System.out.println(internalBoard.representation);
+
+			// updateBoardRows();
+			// WORKING FOR CHANGING PLAYER TURN,
+			// COMMENTED FOR TESTING.
+			if (player == this.redPlayer) {
 				nextPlayer = this.blackPlayer;
-			}
-			else
-			{
+			} else {
 				nextPlayer = this.redPlayer;
 			}
 			//
-			
+
 		}
-		//this.board = internalBoard.toMainBoard();
+		// this.board = internalBoard.toMainBoard();
 		updateBoardRows();
-		
+
 		return valid;
 	}
 

@@ -13,248 +13,248 @@ import java.util.LinkedList;
  */
 public class GameController implements Serializable {
 
-    /**
-     * ID for Serialization.
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 * ID for Serialization.
+	 */
+	private static final long serialVersionUID = 1L;
 
-    // associations
+	// associations
 
-    /**
-     * Full list of games.
-     */
-    protected LinkedList<Game> games = new LinkedList<>();
+	/**
+	 * Full list of games.
+	 */
+	protected LinkedList<Game> games = new LinkedList<>();
 
-    // singleton instance
+	// singleton instance
 
-    /**
-     * Full list of games.
-     */
-    private static GameController gameController;
+	/**
+	 * Full list of games.
+	 */
+	private static GameController gameController;
 
-    protected GameController() {
-    }
+	protected GameController() {
+	}
 
-    /*******************************
-     * Getters/Setters
-     ******************************/
+	/*******************************
+	 * Getters/Setters
+	 ******************************/
 
-    public LinkedList<Game> getGames() {
-        return games;
-    }
+	public LinkedList<Game> getGames() {
+		return games;
+	}
 
-    public void setGames(LinkedList<Game> games) {
-        this.games = games;
-    }
+	public void setGames(LinkedList<Game> games) {
+		this.games = games;
+	}
 
-    /**
-     * getInstance (Singleton)
-     *
-     * @return game controller singleton
-     */
-    public static GameController getInstance() {
-        if (gameController == null)
-            gameController = new GameController();
+	/**
+	 * getInstance (Singleton)
+	 *
+	 * @return game controller singleton
+	 */
+	public static GameController getInstance() {
+		if (gameController == null)
+			gameController = new GameController();
 
-        return gameController;
-    }
+		return gameController;
+	}
 
-    /* ******************************
-     * Use Case functionality
-     ******************************/
+	/*
+	 * ****************************** Use Case functionality
+	 ******************************/
 
-    /***
-     * Creates a new game (Type is determined by game factory). The starting user is
-     * the first player. If bots are requested, they are created as well. The game
-     * implementation itself determined whether there are actually enough players to
-     * start the game.
-     *
-     * @param u uer
-     * @param bots bot string delimited with ";"
-     * @return ID of new game
-     */
-    public int startGame(final User u, final String bots, final String type) throws Exception {
+	/***
+	 * Creates a new game (Type is determined by game factory). The starting user is
+	 * the first player. If bots are requested, they are created as well. The game
+	 * implementation itself determined whether there are actually enough players to
+	 * start the game.
+	 *
+	 * @param u    uer
+	 * @param bots bot string delimited with ";"
+	 * @return ID of new game
+	 */
+	public int startGame(final User u, final String bots, final String type) throws Exception {
 
-        //System.out.println("start game " + type + " with " + bots);
+		// System.out.println("start game " + type + " with " + bots);
 
-        Game newGame = GameFactory.createGame(type);
+		Game newGame = GameFactory.createGame(type);
 
-        //System.out.println("game id " + newGame.getGameID() +
-        //        " type " + newGame.getType() +
-        //        " " + newGame.getClass().getName());
+		// System.out.println("game id " + newGame.getGameID() +
+		// " type " + newGame.getType() +
+		// " " + newGame.getClass().getName());
 
-        Player p = new Player(u, newGame);
-        u.addParticipation(p);
+		Player p = new Player(u, newGame);
+		u.addParticipation(p);
 
-        newGame.addPlayer(p);
+		newGame.addPlayer(p);
 
-        if (!bots.equals("")) {
-            String[] bTypes = bots.split(";");
-            for (String bot : bTypes) {
-                User botG = GameFactory.createBot(bot, newGame);
-                Player botP = new Player(botG, newGame);
-                newGame.addPlayer(botP);
-            }
+		if (!bots.equals("")) {
+			String[] bTypes = bots.split(";");
+			for (String bot : bTypes) {
+				User botG = GameFactory.createBot(bot, newGame);
+				Player botP = new Player(botG, newGame);
+				newGame.addPlayer(botP);
+			}
 
-        }
+		}
 
-        this.games.add(newGame);
+		this.games.add(newGame);
 
-        return newGame.getGameID();
-    }
+		return newGame.getGameID();
+	}
 
-    /**
-     * The supplied User joins an existing game (creating a Player object) that is
-     * waiting for players.
-     *
-     * @param u user
-     * @return -1 if there was no game waiting, otherwise: gameID
-     */
-    public int joinGame(User u, String type) {
-        int ID;
-        Game gameWaiting = findOldestGameWaitingforPlayers(u, type);
+	/**
+	 * The supplied User joins an existing game (creating a Player object) that is
+	 * waiting for players.
+	 *
+	 * @param u user
+	 * @return -1 if there was no game waiting, otherwise: gameID
+	 */
+	public int joinGame(User u, String type) {
+		int ID;
+		Game gameWaiting = findOldestGameWaitingforPlayers(u, type);
 
-        if (gameWaiting == null) {
-            return -1;
-        } else {
-            Player p = new Player(u, gameWaiting);
-            u.addParticipation(p);
+		if (gameWaiting == null) {
+			return -1;
+		} else {
+			Player p = new Player(u, gameWaiting);
+			u.addParticipation(p);
 
-            gameWaiting.addPlayer(p);
+			gameWaiting.addPlayer(p);
 
-            ID = gameWaiting.getGameID();
+			ID = gameWaiting.getGameID();
 
-        }
+		}
 
-        return ID;
-    }
+		return ID;
+	}
 
-    /**
-     * Move request of player is passed to the right game
-     *
-     * @param u      user
-     * @param gameID with game to try a move in
-     * @param move   move string representation (depends on game)
-     * @return true if move was allowed and performed
-     */
-    public boolean tryMove(User u, int gameID, String move) {
-        Game g = getGame(gameID);
+	/**
+	 * Move request of player is passed to the right game
+	 *
+	 * @param u      user
+	 * @param gameID with game to try a move in
+	 * @param move   move string representation (depends on game)
+	 * @return true if move was allowed and performed
+	 */
+	public boolean tryMove(User u, int gameID, String move) {
+		Game g = getGame(gameID);
 
-        if (g != null) {
+		if (g != null) {
 
-            // game running
-            if (!g.isStarted() || g.isFinished()) {
-                return false;
-            } else {
-                return g.tryMove(move, g.getPlayer(u));
-            }
-        }
+			// game running
+			if (!g.isStarted() || g.isFinished()) {
+				return false;
+			} else {
+				return g.tryMove(move, g.getPlayer(u));
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    /**
-     * GiveUp request of player is passed to the right game
-     *
-     * @param u      user
-     * @param gameID which game to give up
-     */
-    public void giveUp(User u, int gameID) {
-        Game g = getGame(gameID);
+	/**
+	 * GiveUp request of player is passed to the right game
+	 *
+	 * @param u      user
+	 * @param gameID which game to give up
+	 */
+	public void giveUp(User u, int gameID) {
+		Game g = getGame(gameID);
 
-        if (g != null) {
-            g.giveUp(g.getPlayer(u));
-        }
-    }
+		if (g != null) {
+			g.giveUp(g.getPlayer(u));
+		}
+	}
 
-    /**
-     * Call draw (Remis) request of player is passed to the right game
-     *
-     * @param u      user
-     * @param gameID which game to call draw
-     */
-    public void callDraw(User u, int gameID) {
-        Game g = getGame(gameID);
+	/**
+	 * Call draw (Remis) request of player is passed to the right game
+	 *
+	 * @param u      user
+	 * @param gameID which game to call draw
+	 */
+	public void callDraw(User u, int gameID) {
+		Game g = getGame(gameID);
 
-        if (g != null) {
-            g.callDraw(g.getPlayer(u));
-        }
-    }
+		if (g != null) {
+			g.callDraw(g.getPlayer(u));
+		}
+	}
 
-    /**
-     * Retrieves the game state from the concrete game.
-     *
-     * @param gameID which game to get state from
-     * @return game info
-     */
-    public String getGameState(int gameID) {
-        Game g = getGame(gameID);
+	/**
+	 * Retrieves the game state from the concrete game.
+	 *
+	 * @param gameID which game to get state from
+	 * @return game info
+	 */
+	public String getGameState(int gameID) {
+		Game g = getGame(gameID);
 
-        if (g != null) {
-            return g.getBoard();
-        } else {
-            return "";
-        }
-    }
+		if (g != null) {
+			return g.getBoard();
+		} else {
+			return "";
+		}
+	}
 
-    /**
-     * Retrieves status text from the concrete game.
-     *
-     * @param gameID which game to get status for
-     * @return game info
-     */
-    public String getGameStatus(int gameID) {
-        Game g = getGame(gameID);
+	/**
+	 * Retrieves status text from the concrete game.
+	 *
+	 * @param gameID which game to get status for
+	 * @return game info
+	 */
+	public String getGameStatus(int gameID) {
+		Game g = getGame(gameID);
 
-        if (g != null) {
-            return g.getStatus();
-        } else {
-            return "";
-        }
-    }
+		if (g != null) {
+			return g.getStatus();
+		} else {
+			return "";
+		}
+	}
 
-    /**
-     * Retrieves additional info text about the game state from the concrete game.
-     *
-     * @param gameID game id
-     * @return game info
-     */
-    public String gameInfo(int gameID) {
-        Game g = getGame(gameID);
+	/**
+	 * Retrieves additional info text about the game state from the concrete game.
+	 *
+	 * @param gameID game id
+	 * @return game info
+	 */
+	public String gameInfo(int gameID) {
+		Game g = getGame(gameID);
 
-        if (g != null) {
-            return g.gameInfo();
-        } else {
-            return "";
-        }
-    }
+		if (g != null) {
+			return g.gameInfo();
+		} else {
+			return "";
+		}
+	}
 
-    /*******************************
-     * Helpers.
-     ******************************/
+	/*******************************
+	 * Helpers.
+	 ******************************/
 
-    public Game getGame(int gameID) {
+	public Game getGame(int gameID) {
 
-        for (Game g : games) {
-            if (g.getGameID() == gameID)
-                return g;
-        }
+		for (Game g : games) {
+			if (g.getGameID() == gameID)
+				return g;
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    public Game findOldestGameWaitingforPlayers(User u, String type) {
+	public Game findOldestGameWaitingforPlayers(User u, String type) {
 
-        for (Game g : games) {
-            if (!g.isStarted() && !g.isPlayer(u) && g.getType().equals(type))
-                return g;
-        }
+		for (Game g : games) {
+			if (!g.isStarted() && !g.isPlayer(u) && g.getType().equals(type))
+				return g;
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    public void clear() {
-        games = new LinkedList<>();
-    }
+	public void clear() {
+		games = new LinkedList<>();
+	}
 
 }

@@ -8,83 +8,83 @@ import java.io.Serializable;
  */
 public class Player implements Serializable {
 
-    private static final long serialVersionUID = -7102992782236150705L;
+	private static final long serialVersionUID = -7102992782236150705L;
 
-    /**********************************
-     * Member
-     **********************************/
+	/**********************************
+	 * Member
+	 **********************************/
 
-    // attributes
-    private boolean requestedDraw = false;
-    private boolean gaveUp = false;
-    private boolean winner = false;         // winner saved in Players, because some games may have multiple winners
-    private boolean gameInvalid = false;    // only for tournament mode
+	// attributes
+	private boolean requestedDraw = false;
+	private boolean gaveUp = false;
+	private boolean winner = false; // winner saved in Players, because some games may have multiple winners
+	private boolean gameInvalid = false; // only for tournament mode
 
-    // associations
-    private final User user;
-    private final Game game;
+	// associations
+	private final User user;
+	private final Game game;
 
-    /**********************************
-     * Constructors
-     **********************************/
+	/**********************************
+	 * Constructors
+	 **********************************/
 
-    public Player(User u, Game g) {
-        user = u;
-        game = g;
-    }
+	public Player(User u, Game g) {
+		user = u;
+		game = g;
+	}
 
-    /**********************************
-     * Getter/Setter/Helper
-     **********************************/
+	/**********************************
+	 * Getter/Setter/Helper
+	 **********************************/
 
-    public void finishGame() {
-        user.finishGame(this);
-    }
+	public void finishGame() {
+		user.finishGame(this);
+	}
 
-    public String getName() {
-        if (user != null)
-            return user.getName();
-        return "";
-    }
+	public String getName() {
+		if (user != null)
+			return user.getName();
+		return "";
+	}
 
-    public User getUser() {
-        return user;
-    }
+	public User getUser() {
+		return user;
+	}
 
-    public Game getGame() {
-        return game;
-    }
+	public Game getGame() {
+		return game;
+	}
 
-    public boolean isWinner() {
-        return winner;
-    }
+	public boolean isWinner() {
+		return winner;
+	}
 
-    public boolean surrendered() {
-        return gaveUp;
-    }
+	public boolean surrendered() {
+		return gaveUp;
+	}
 
-    public boolean requestedDraw() {
-        return requestedDraw;
-    }
+	public boolean requestedDraw() {
+		return requestedDraw;
+	}
 
-    public void requestDraw() {
-        requestedDraw = true;
-    }
+	public void requestDraw() {
+		requestedDraw = true;
+	}
 
-    public void surrender() {
-        gaveUp = true;
-    }
+	public void surrender() {
+		gaveUp = true;
+	}
 
-    public void setWinner() {
-        winner = true;
-    }
+	public void setWinner() {
+		winner = true;
+	}
 
-    public void invalidateGame() {
-        gameInvalid = true;
-    }
+	public void invalidateGame() {
+		gameInvalid = true;
+	}
 
-    public boolean isGameInvalid() {
-        return gameInvalid;
-    }
+	public boolean isGameInvalid() {
+		return gameInvalid;
+	}
 
 }
