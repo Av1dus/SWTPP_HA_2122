@@ -1,7 +1,6 @@
 package de.tuberlin.sese.swtpp.gameserver.model.xiangqi;
 
 import de.tuberlin.sese.swtpp.gameserver.model.*;
-//TODO: more imports from JVM allowed here
 
 import java.io.Serializable;
 
@@ -23,7 +22,6 @@ public class XiangqiGame extends Game implements Serializable {
 	public String[] boardRows;
 
 	// internal representation of the game state
-	// TODO: insert additional game data here
 
 	/************************
 	 * constructors
@@ -34,8 +32,6 @@ public class XiangqiGame extends Game implements Serializable {
 		// this.board = "RHEAGAEHR/9/1C5C1/S1S1S1S1S/9/9/s1s1s1s1s/1c5c1/9/rheagaehr";
 		this.board = "rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR";
 		this.boardRows = getBoardRows();
-
-		// TODO: initialization of game state can go here
 	}
 
 	public String getType() {
@@ -211,13 +207,11 @@ public class XiangqiGame extends Game implements Serializable {
 		// some artificial state.
 		// It can be assumed that the state supplied is a regular board that can be
 		// reached during a game.
-		// TODO: implement
 		this.board = state;
 	}
 
 	@Override
 	public String getBoard() {
-		// TODO: implement
 		// return "rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR";
 		return this.board;
 	}
@@ -296,7 +290,6 @@ public class XiangqiGame extends Game implements Serializable {
 
 	@Override
 	public boolean tryMove(String moveString, Player player) {
-		// TODO: implement
 		String color = "";
 		if (player == this.redPlayer)
 			color = "red";
