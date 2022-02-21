@@ -5,39 +5,55 @@ public class Rook extends Figures {
 		super(p, 'r');
 	}
 
+	private Pair minmax( int left, int right ) {
+		return left < right ? new Pair(left, right) : new Pair(right, left);
+	}
+	
+	private int countFigures(String figs) {
+		int result = 0;
+		
+		for ( char c : figs.toCharArray() ) {
+			if ( this.charIsFigure(c) )
+				++result;
+		}
+		
+		return result;
+	}
+	
 	@Override
 	public boolean isValidMove(Points p, String board) {
+		String line = "";
+		char targetField = this.getFieldValue(p.e, board);
 		Pair dif = p.absDifference();
-		if (dif.x > 0 && dif.y == 0) {
-			String row = this.expandRow(new StringBuilder(board.split("/")[9 - p.s.y]));
-			for (int i = p.s.x + 1; i < p.e.x; i++)
-				if (!Character.isDigit(row.charAt(i)))
-					return false;
-			if (this.ownFigure(row.charAt(p.e.x)))
-				return false;
-		} else if (dif.x == 0 && dif.y > 0) {
-			String column = this.getBoardCollumn(board, p.s.x);
-			boolean reversed = false;
-			if (p.e.y < p.s.y) {
-				p.reverse();
-				reversed = true;
-			}
-			for (int i = 9 - p.s.y + 1; i < 9 - p.e.y; i++)
-				if (!Character.isDigit(column.charAt(i)))
-					return false;
-			if (reversed) {
-				if (this.ownFigure(column.charAt(9 - p.s.y))) {
-					p.reverse();
-					return false;
-				} else {
-					p.reverse();
-				}
-			} else {
-				return this.ownFigure(column.charAt(9 - p.s.y));
-			}
-		} else {
+		Pair subRange = new Pair(0, 0);
+		
+		if ( !(dif.x == 0 ^ dif.y == 0) || this.ownFigure(targetField))
 			return false;
+		
+		if (dif.y == 0) {
+			subRange = minmax(p.s.x, p.e.x); // (x == lower, y == upper) see 'minmax'
+			line = this.expandRow(new StringBuilder(board.split("/")[9 - p.e.y])).toString();
+		} else {
+			subRange = minmax(p.s.y, p.e.y);
+			line = this.getBoardCollumn(board, p.s.x);
 		}
-		return true;
+		
+		line = line.substring(subRange.x, subRange.y + 1);
+		int figuresOnSubrange = this.countFigures(line);
+		
+		System.out.println(!this.ownFigure(targetField));
+		System.out.println(this.identifier);
+		System.out.println(targetField + ", count: " + figuresOnSubrange);
+		
+		if (!this.ownFigure(targetField)) {
+			System.out.println(line);
+			if (this.charIsFigure(targetField)) {
+				return figuresOnSubrange == 2; // own figure + target figure
+			} else {
+				return figuresOnSubrange == 1;	// own figure
+			}
+		}
+		
+		return false;
 	}
 }

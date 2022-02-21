@@ -8,24 +8,25 @@ public class Soldier extends Figures {
 
 	@Override
 	public boolean isValidMove(Points p, String board) {
-		Pair dif = p.absDifference();
-		boolean valid_move_pre_river = (dif.x == 0 && dif.y == 1);
-		boolean valid_move_post_river = valid_move_pre_river || (dif.x == 1 && dif.y == 0);
+		Pair absDif = p.absDifference();
+		Pair dif = p.difference();
+		boolean valid_vertical_move = absDif.x == 0 && absDif.y == 1;
+		boolean valid_horizontal_move = absDif.x == 1 && absDif.y == 0;
 		
 		if (this.ownFigure(this.getFieldValue(p.e, board)))
 			return false;
 		
 		if (this.player.equals("red")) {
 			if (p.s.y < 5) {
-				return valid_move_pre_river;
+				return valid_vertical_move && dif.y > 0;
 			} else {
-				return valid_move_post_river;
+				return valid_horizontal_move ^ (valid_vertical_move && dif.y > 0);
 			}
 		} else if (this.player.equals("black")) {
 			if (p.s.y > 4) {
-				return valid_move_pre_river;
+				return valid_vertical_move && dif.y < 0;
 			} else {
-				return valid_move_post_river;
+				return valid_horizontal_move ^ (valid_vertical_move && dif.y < 0);
 			}
 		}
 		

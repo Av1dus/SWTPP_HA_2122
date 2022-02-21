@@ -19,16 +19,15 @@ public class Figures {
 	}
 
 	public boolean charIsFigure(char val) {
-		char[] figChars = { 'g', 'a', 'e', 'h', 'r', 'c', 's' };
-		return Arrays.asList(figChars).contains(Character.toLowerCase(val));
+		return !Character.isDigit(val);
 	}
 
 	public String getBoardCollumn(String board, int col) {
 		String[] rows = board.split("/");
-		char[] column = new char[rows.length];
+		char[] column = new char[10];
 		int counter = 0;
 		for (String r : rows) {
-			column[counter] = (this.expandRow(new StringBuilder(r))).charAt(col);
+			column[9 - counter] = this.expandRow(new StringBuilder(r)).charAt(col);
 			counter++;
 		}
 		return String.valueOf(column);

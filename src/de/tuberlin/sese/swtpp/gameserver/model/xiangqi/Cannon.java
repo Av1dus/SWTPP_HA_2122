@@ -5,41 +5,55 @@ public class Cannon extends Figures {
 		super(p, 'c');
 	}
 
+	private Pair minmax( int left, int right ) {
+		return left < right ? new Pair(left, right) : new Pair(right, left);
+	}
+	
+	private int countFigures(String figs) {
+		int result = 0;
+		
+		for ( char c : figs.toCharArray() ) {
+			if ( this.charIsFigure(c) )
+				++result;
+		}
+		
+		return result;
+	}
+	
 	@Override
 	public boolean isValidMove(Points p, String board) {
-		char dir = 'x';
 		String line = "";
+		char targetField = this.getFieldValue(p.e, board);
 		Pair dif = p.absDifference();
-		if (!((dif.x == 0 && dif.y > 0) || (dif.x > 0 && dif.y == 0)))
+		Pair subRange = new Pair(0, 0);
+		
+		if ( !(dif.x == 0 ^ dif.y == 0) || this.ownFigure(targetField))
 			return false;
+		
 		if (dif.y == 0) {
+			subRange = minmax(p.s.x, p.e.x); // (x == lower, y == upper) see 'minmax'
 			line = this.expandRow(new StringBuilder(board.split("/")[9 - p.e.y])).toString();
 		} else {
+			subRange = minmax(p.s.y, p.e.y);
 			line = this.getBoardCollumn(board, p.s.x);
-			dir = 'y';
 		}
-		char targetField = this.getFieldValue(p.e, board);
-		line = line.substring(p.min(dir) + 1, p.max(dir));
+		
+		line = line.substring(subRange.x, subRange.y + 1);
+		int figuresOnSubrange = this.countFigures(line);
+		
 		System.out.println(!this.ownFigure(targetField));
 		System.out.println(this.identifier);
-		System.out.println(targetField);
+		System.out.println(targetField + ", count: " + figuresOnSubrange);
+		
 		if (!this.ownFigure(targetField)) {
 			System.out.println(line);
-			int counter = 0;
-			if (Character.isDigit(targetField)) {
-				for (char l : line.toCharArray())
-					if (!Character.isDigit(l))
-						counter++;
-				if (counter == 0)
-					return true;
+			if (this.charIsFigure(targetField)) {
+				return figuresOnSubrange == 3; // own figure + target figure + figure between
 			} else {
-				for (char l : line.toCharArray())
-					if (!Character.isDigit(l))
-						counter++;
-				if (counter == 1)
-					return true;
+				return figuresOnSubrange == 1;	// own figure
 			}
 		}
+		
 		return false;
 	}
 }
