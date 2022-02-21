@@ -291,46 +291,41 @@ public class XiangqiGame extends Game implements Serializable {
 	@Override
 	public boolean tryMove(String moveString, Player player) {
 		String color = "";
-		if (player == this.redPlayer)
+		if (player.equals(this.redPlayer))
 			color = "red";
 		else
 			color = "black";
 		System.out.println(color);
-		// MoveBoard internalBoard = new MoveBoard(this.board, color, this.boardRows);
-		// this.board = internalBoard.representation;
 
 		if (!validateMoveString(moveString))
 			return false;
+		
 		String[] fields = moveString.split("-");
+		Pair field = getFieldValue( fields[0] );
+		boolean is_red = Character.isUpperCase(getBoardRows()[9 - field.y].charAt(field.x)) && color.equals("red");
+		boolean is_black = Character.isLowerCase(getBoardRows()[9 - field.y].charAt(field.x)) && color.equals("black");
+		
+		if ( !(is_red ^ is_black) )
+			return false;
+		
 		Figures figure = getFigureFromField(fields[0], color);
-		Figures endFig = getFigureFromField(fields[1], color);
 		System.out.println(figure.identifier);
-		if (color == "red" && Character.isLowerCase(figure.identifier))
-			return false;
-		if (color == "black" && Character.isUpperCase(figure.identifier))
-			return false;
-
+		
 		Points p = new Points(getFieldValue(fields[0]), getFieldValue(fields[1]));
 		boolean valid = figure.isValidMove(p, this.board);
 		System.out.println("tryMove is valid? " + valid);
+		
 		if (valid) {
-			// internalBoard.representation = figure.applyMove(p,
-			// internalBoard.representation);
+			this.history.add(new Move(moveString, this.board, player));
 			this.board = figure.applyMove(p, this.board);
-			// System.out.println(internalBoard.representation);
-
-			// updateBoardRows();
-			// WORKING FOR CHANGING PLAYER TURN,
-			// COMMENTED FOR TESTING.
+			
 			if (player == this.redPlayer) {
 				nextPlayer = this.blackPlayer;
 			} else {
 				nextPlayer = this.redPlayer;
 			}
-			//
 
 		}
-		// this.board = internalBoard.toMainBoard();
 		updateBoardRows();
 
 		return valid;
