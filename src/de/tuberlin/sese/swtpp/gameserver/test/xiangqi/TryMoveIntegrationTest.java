@@ -45,7 +45,7 @@ public class TryMoveIntegrationTest {
 	}
 
 	public void assertMove(String move, boolean red, boolean expectedResult) {
-		if (red)
+		if (red) 
 			assertEquals(expectedResult, game.tryMove(move, redPlayer));
 		else
 			assertEquals(expectedResult, game.tryMove(move, blackPlayer));
@@ -215,14 +215,7 @@ public class TryMoveIntegrationTest {
 		assertMove("e4-d5", false, false); 
 		assertMove("e4-f5", false, false);
 		assertMove("e4-e4", false, false);
-		game.debug=true;
-		
-		System.out.println(game.getBoard());
-		System.out.println(game.getNextPlayer() == redPlayer);
-		System.out.println(game.isFinished());
-		System.out.println(redPlayer.isWinner());
-		assertGameState("3g5/9/9/9/9/4s4/9/9/9/5G3", false, false, false);
-		game.debug=false;
+		assertGameState("3g5/9/9/9/9/4s4/9/9/9/5G3", false, false, false);		
 	}
 	
 	@Test
@@ -234,17 +227,48 @@ public class TryMoveIntegrationTest {
 		assertMove("c9-f4", false, false); //FTF
 		assertMove("c9-f4", false, false); //FTT
 		assertMove("c9-d4", false, false); //TFF
-		
-		assertMove("c9-d7", false, true); //TFT  -> FALSE RESOLUTION
-		startGame("2e2g3/3s5/S2ss4/9/9/9/9/9/9/4G4", false);
+		assertMove("c9-d7", false, false); //TFT  -> FALSE RESOLUTION
 		assertMove("c9-e7", false, false); //TTF
 		assertMove("c9-a7", false, true); //TTT
-		
+		startGame("2e2g3/3s5/3ss4/9/9/9/9/9/9/4G4", false);
+		assertMove("c9-c6", false, false); //TTT
+		startGame("2e2s3/3sg4/s2ss4/9/9/9/9/9/9/4G4", false);
+		game.debug=true;
+		assertMove("c9-a7", false, false);
+		game.debug=false;
+		startGame("2e2s3/3s1g3/s2s5/9/6s2/9/9/9/9/4G4", false);
+		assertMove("c9-e9", false, false);
+		assertGameState("2e2s3/3s1g3/s2s5/9/6s2/9/9/9/9/4G4", false, false, false);
 	}
 	
 	@Test
-	public void CannonTest()
+	public void HorseTest()
 	{
+		startGame("2h2s3/3s1g3/s2s5/9/6s2/9/9/9/9/4G4", false);
+		assertMove("c9-d8", false, false); //FFF
+		assertMove("c9-e8", false, true); //FFF
+		startGame("2h2s3/3s1g3/s2s5/9/6s2/9/9/9/9/4G4", false);
+		assertMove("c9-b7", false, true); //FFF
+		startGame("2h2s3/3s1g3/s2s5/9/6s2/9/9/9/9/4G4", false);
+		assertMove("c9-a8", false, true); //FFF
+		startGame("2h2s3/3s1g3/s2s5/9/6s2/9/9/9/9/4G4", false);
+		assertMove("c9-d7", false, false); //FFF
+		assertGameState("2h2s3/3s1g3/s2s5/9/6s2/9/9/9/9/4G4", false, false, false);
+	}
+	
+	@Test
+	public void GeneralTest()
+	{
+		
+		startGame("9/4g4/9/9/9/9/9/9/9/3G5", true);
+		assertMove("d0-c0", true, false);
+		startGame("9/4g4/9/9/9/9/9/9/9/5G3", true);
+		assertMove("f0-g0", true, false);
+		startGame("9/4g4/9/9/9/9/9/9/9/5G3", true);
+		assertMove("f0-e0", true, true);
+		startGame("9/4g4/9/9/9/9/9/9/9/5G3", false);
+		assertMove("e8-f8", false ,false);
+		
 		
 	}
 }

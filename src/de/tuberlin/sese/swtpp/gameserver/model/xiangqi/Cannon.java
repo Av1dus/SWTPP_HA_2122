@@ -25,28 +25,16 @@ public class Cannon extends Figures {
 		char targetField = this.getFieldValue(p.e, board);
 		Pair dif = p.absDifference();
 		Pair subRange = new Pair(0, 0);
+		if ( !(dif.x == 0 ^ dif.y == 0) || this.ownFigure(targetField))	return false;
 		
-		if ( !(dif.x == 0 ^ dif.y == 0) || this.ownFigure(targetField))
-			return false;
-		
-		if (dif.y == 0) {
-			subRange = minmax(p.s.x, p.e.x); // (x == lower, y == upper) see 'minmax'
-			line = this.expandRow(new StringBuilder(board.split("/")[9 - p.e.y])).toString();
-		}
-		else {
-			subRange = minmax(p.s.y, p.e.y);
-			line = this.getBoardCollumn(board, p.s.x);
-		}
+		if (dif.y == 0) {	subRange = minmax(p.s.x, p.e.x); // (x == lower, y == upper) see 'minmax'
+							line = this.expandRow(new StringBuilder(board.split("/")[9 - p.e.y])).toString();	}
+		else { 				subRange = minmax(p.s.y, p.e.y); 
+							line = this.getBoardCollumn(board, p.s.x);	}
 		
 		line = line.substring(subRange.x, subRange.y + 1);
 		int figuresOnSubrange = this.countFigures(line);
-		/*
-		System.out.println(!this.ownFigure(targetField));
-		System.out.println(this.identifier);
-		System.out.println(targetField + ", count: " + figuresOnSubrange);
-		*/
 		if (!this.ownFigure(targetField)) {
-			//System.out.println(line);
 			if (this.charIsFigure(targetField)) {
 				return figuresOnSubrange == 3; // own figure + target figure + figure between
 			} else {

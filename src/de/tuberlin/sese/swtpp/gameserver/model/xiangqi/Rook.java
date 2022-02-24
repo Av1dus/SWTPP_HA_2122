@@ -26,7 +26,10 @@ public class Rook extends Figures {
 		char targetField = this.getFieldValue(p.e, board);
 		Pair dif = p.absDifference();
 		Pair subRange = new Pair(0, 0);
-		if (!(dif.x == 0 ^ dif.y == 0) || this.ownFigure(targetField))return false;
+		if (!(dif.x == 0 
+				^ dif.y == 0) 
+				|| this.ownFigure(targetField))
+			return false;
 		if (dif.y == 0) {	subRange = minmax(p.s.x, p.e.x); line = this.expandRow(new StringBuilder(board.split("/")[9 - p.e.y])).toString();}
 		else {				subRange = minmax(p.s.y, p.e.y); line = this.getBoardCollumn(board, p.s.x);	}
 		line = line.substring(subRange.x, subRange.y + 1);

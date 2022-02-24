@@ -11,7 +11,8 @@ public class Horse extends Figures {
 		Pair dif = p.difference();
 		Pair start = p.s;
 		
-		if (absDif.x + absDif.y != 3 || this.ownFigure(this.getFieldValue(p.e, board)))
+		if (absDif.x + absDif.y != 3 
+				|| this.ownFigure(this.getFieldValue(p.e, board)))
 			return false;
 		
 		if (absDif.x > 1) {

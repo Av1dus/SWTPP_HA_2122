@@ -70,7 +70,7 @@ public class Figures {
 		StringBuilder ret = new StringBuilder();
 		for (char c : row.toString().toCharArray()) {
 			int empty = c - 48;
-			if (empty > 0 && empty <= 9) {
+			if (empty <= 9) {
 				for (int i = 0; i < empty; i++) {
 					ret.append('1');
 				}
@@ -87,7 +87,7 @@ public class Figures {
 		for (int i = 0; i < row.length(); i++) {
 			char c = row.charAt(i);
 			int empty = c - 48;
-			if (empty > 0 && empty <= 9) {
+			if (empty <= 9) {
 				count++;
 			} else {
 				char countC = (char) (count + 48);
@@ -110,17 +110,6 @@ public class Figures {
 		boolean both_black = Character.isUpperCase(this.identifier) && Character.isUpperCase(fig);
 		
 		return !Character.isDigit(fig) && (both_red ^ both_black); // ^ == exclusive-or
-
-		// if (!Character.isDigit(fig)) {
-		// if (Character.isLowerCase(this.identifier)) {
-		// if (Character.isLowerCase(fig))
-		// return true;
-		// } else {
-		// if (Character.isUpperCase(fig))
-		// return true;
-		// }
-		// }
-		// return false;
 	}
 
 	public char getFieldValue(Pair p, String board) {
