@@ -3,6 +3,7 @@ package de.tuberlin.sese.swtpp.gameserver.model.xiangqi;
 import de.tuberlin.sese.swtpp.gameserver.model.*;
 
 import java.io.Serializable;
+import java.util.*;
 
 public class XiangqiGame extends Game implements Serializable {
 
@@ -228,6 +229,39 @@ public class XiangqiGame extends Game implements Serializable {
 		this.boardRows = getBoardRows();
 	}
 
+	public Figures getFigureFromPos( Pair pos, String playerColor ) {
+		char f = boardRows[9 - pos.y].charAt(pos.x);
+		System.out.println(f);
+		Figures fig;
+		switch (Character.toLowerCase(f)) {
+		case 'g':
+			fig = new General(playerColor);
+			break;
+		case 'a':
+			fig = new Advisor(playerColor);
+			break;
+		case 'e':
+			fig = new Elephant(playerColor);
+			break;
+		case 'h':
+			fig = new Horse(playerColor);
+			break;
+		case 'r':
+			fig = new Rook(playerColor);
+			break;
+		case 'c':
+			fig = new Cannon(playerColor);
+			break;
+		case 's':
+			fig = new Soldier(playerColor);
+			break;
+		default:
+			fig = new Figures("null", 'n');
+			break;
+		}
+		return fig;	
+	}
+	
 	public Figures getFigureFromField(String field, String playerColor) {
 		Pair p = getFieldValue(field);
 		char f = boardRows[9 - p.y].charAt(p.x);
@@ -270,17 +304,106 @@ public class XiangqiGame extends Game implements Serializable {
 		if (moveString.length() != 5)
 			return false;
 		char[] msLetter = moveString.toCharArray();
-		boolean[] conditions = { (msLetter[0] > 96 && msLetter[0] < 106),
-				(msLetter[1] > 47 && msLetter[1] < 58),
-				(msLetter[2] == 45),
-				(msLetter[3] > 96 && msLetter[3] < 106),
-				(msLetter[4] > 47 && msLetter[4] < 58) };
+		boolean[] conditions = { (msLetter[0] > 96 && msLetter[0] < 106), (msLetter[1] > 47 && msLetter[1] < 58),
+				(msLetter[2] == 45), (msLetter[3] > 96 && msLetter[3] < 106), (msLetter[4] > 47 && msLetter[4] < 58) };
 		for (int i = 0; i < conditions.length; i++) {
 			if (!conditions[i]) {
 				return false;
 			}
 		}
 		return true;
+	}
+
+	public Pair posOfGeneral(Player pl) {
+		this.updateBoardRows();
+
+		Figures result = new Figures("", 'b');
+		for (int x = 3; x < 6; ++x) {
+			for (int y = 7; y < 10; ++y) {
+				Pair temp = new Pair(x, y);
+				result = this.getFigureFromPos(temp, this.board);
+				
+				if ( result.player.equals("black") && pl.equals(this.blackPlayer) ) {
+					return temp;
+				}
+			}
+		
+			for (int y = 0; y < 3; ++y) {
+				Pair temp = new Pair(x, y);
+				result = this.getFigureFromPos(temp, this.board);
+				
+				if ( result.player.equals("red") && pl.equals(this.redPlayer) ) {
+					return temp;
+				}
+			}
+		}
+		
+		return new Pair(-1, -1);
+	}
+
+	public List<Pair> figurePositionsOf(Player pl) {
+		List<Pair> result = new LinkedList<Pair>();
+		
+		for (int x = 0; x < 9; ++x) {
+			for (int y = 0; y < 10; ++y) {
+				Pair temp = new Pair(x, y);
+				Figures f = this.getFigureFromPos(temp, this.board);
+				
+				if (f.player.equals("red") && pl.equals(this.redPlayer)) {
+					result.add(temp);
+				} else if (f.player.equals("black") && pl.equals(this.blackPlayer)) {
+					result.add(temp);	
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	public boolean isReachable(Pair pos, Player pl) {
+		List<Pair> figures = figurePositionsOf(pl);
+		
+		for ( Pair p : figures ) {
+			Figures f = this.getFigureFromPos(pos, board);
+			
+			if ( f.isValidMove(new Points(p, pos), board) ) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean isClearFor(Pair target, Player pl) {
+		Figures temp = this.getFigureFromPos(target, this.board);
+		boolean target_is_empty = temp.equals(new Figures("null", 'n'));
+		
+		if (pl.equals(this.blackPlayer)) {
+			return target_is_empty && !this.isReachable(target, this.redPlayer);
+		} else {
+			return target_is_empty && !this.isReachable(target, this.blackPlayer);	
+		}
+	}
+	
+	public boolean isInCheckmate(Player pl) {
+		this.updateBoardRows();
+
+		Pair pos = this.posOfGeneral(pl);
+		Figures gen = this.getFigureFromPos(pos, this.board);
+		Pair[] dests = {
+				new Pair(pos.x + 1, pos.y),
+				new Pair(pos.x - 1, pos.y),
+				new Pair(pos.x, pos.y + 1),
+				new Pair(pos.x, pos.y - 1) };
+		
+		for ( int i = 0; i < 4; ++i ) {
+			Points move = new Points(pos, dests[i]);
+			if ( gen.isValidMove(move, board) && this.isClearFor(dests[i], pl) ) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	@Override
@@ -295,20 +418,19 @@ public class XiangqiGame extends Game implements Serializable {
 			color = "red";
 		else
 			color = "black";
-		
 
 		if (!validateMoveString(moveString))
 			return false;
-		
+
 		String[] fields = moveString.split("-");
-		Pair field = getFieldValue( fields[0] );
+		Pair field = getFieldValue(fields[0]);
 		boolean is_red = Character.isUpperCase(getBoardRows()[9 - field.y].charAt(field.x)) && color.equals("red");
 		boolean is_black = Character.isLowerCase(getBoardRows()[9 - field.y].charAt(field.x)) && color.equals("black");
 		
 		Figures figure = getFigureFromField(fields[0], color);
-		if ( !(is_red ^ is_black) )
+		if (!(is_red ^ is_black))
 			return false;
-		
+	
 		//Figures figure = getFigureFromField(fields[0], color);
 		if(this.debug)
 		{
@@ -319,11 +441,11 @@ public class XiangqiGame extends Game implements Serializable {
 		Points p = new Points(getFieldValue(fields[0]), getFieldValue(fields[1]));
 		boolean valid = figure.isValidMove(p, this.board);
 		if(this.debug)System.out.print(" -> valid? " + valid +"  ");
-		
+
 		if (valid) {
 			this.history.add(new Move(moveString, this.board, player));
 			this.board = figure.applyMove(p, this.board);
-			
+
 			if (player == this.redPlayer) {
 				nextPlayer = this.blackPlayer;
 			} else {
