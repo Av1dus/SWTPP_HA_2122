@@ -139,19 +139,31 @@ public class TryMoveIntegrationTest {
 	@Test
 	public void blackStartAndWin()
 	{
-		
 		startGame("3g5/9/9/9/9/9/9/9/rr7/4G4", false); //red starts
 		assertMove("a1-a0", false, true);
-		assertGameState("3g5/9/9/9/9/9/9/9/1r7/r3G4", true, true, false);
-		
+		assertGameState("3g5/9/9/9/9/9/9/9/1r7/r3G4", true, true, false);		
 	}
 	
 	@Test
 	public void redStartAndWin()
-	{
-		startGame("4g4/RR7/9/9/9/9/9/9/3G5/9", true); //red starts
+	{	
+		
+		startGame("3g5/RR7/9/9/9/9/9/9/5G3/9", false); //red starts
+		game.debug=true;
 		assertMove("a8-a9", true, true);
-		assertGameState("R3g4/1R7/9/9/9/9/9/9/3G5/9", true, true, true);
+		
+		assertGameState("R2g5/1R7/9/9/9/9/9/9/5G3/9", false, false, false);
+		System.out.println(game.getBoard());
+		System.out.println(game.getNextPlayer() == redPlayer);
+		System.out.println(game.isFinished());
+		System.out.println(redPlayer.isWinner());
+		game.debug=false;
+		
+		assertMove("d9-e9", false, false);
+		
+		assertGameState("R2g5/1R7/9/9/9/9/9/9/5G3/9", false, false, false);
+		
+		
 	}
 	
 	@Test
@@ -208,17 +220,12 @@ public class TryMoveIntegrationTest {
 		assertMove("e6-f5", false, false);
 		assertMove("e6-e5", false, true);
 		assertGameState("rheagaehr/9/1c5c1/s1s3s1s/4s4/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR", true, false, false);
-		startGame("9/9/9/9/9/9/9/9/4s4/9", false);
-		assertMove("e1-e1", false, false);  
-		assertMove("e1-d2", false, false); 
-		assertMove("e1-e2", false, false);
-		assertMove("e1-f2", false, false);
-		assertMove("e1-d0", false, false);
-		assertMove("e1-f0", false, false);
-		assertMove("e1-e0", false, true);
-		assertMove("e1-d1", false, false); 
-		assertMove("e1-f1", false, false);
-		assertGameState("9/9/9/9/9/9/9/9/9/4s4", true, false, false);
+		startGame("3g5/9/9/9/9/4s4/9/9/9/5G3", false);
+		assertMove("e4-e5", false, false);  
+		assertMove("e4-d5", false, false); 
+		assertMove("e4-f5", false, false);
+		assertMove("e4-e4", false, false);
+		assertGameState("3g5/9/9/9/9/9/4s4/9/9/5G3", true, false, false);
 	}
 	
 	@Test

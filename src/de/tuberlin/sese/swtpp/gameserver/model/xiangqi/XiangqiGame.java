@@ -321,7 +321,7 @@ public class XiangqiGame extends Game implements Serializable {
 		
 		for ( Pair p : figures ) {
 			Figures f = this.getFigureFromPos(p, color);
-			//if(this.debug) System.out.println(f.identifier+" @ "+p.x+","+p.y + " valid? "+ f.isValidMove(new Points(p, pos), board));
+			if(this.debug) System.out.println(color+" "+f.identifier+" @ "+p.x+","+p.y + " valid? "+ f.isValidMove(new Points(p, pos), board));
 			if ( f.isValidMove(new Points(p, pos), board) ) {
 				return true;
 			}
@@ -345,14 +345,19 @@ public class XiangqiGame extends Game implements Serializable {
 				new Pair(pos.x - 1, pos.y),
 				new Pair(pos.x, pos.y + 1),
 				new Pair(pos.x, pos.y - 1) };
-		if (color.equals("red"))color = "black";
-		else color = "red";
+		String col = color.equals("red") ? "black" : "red";
 		for ( int i = 0; i < 4; ++i ) {
 			Points move = new Points(pos, dests[i]);
-			//if(this.debug)System.out.println(color+" pos "+pos.x+","+pos.y+"  dest "+dests[i].x+","+dests[i].y);
-			if ( general.isValidMove(move, board) && !this.isReachable(dests[i], color) ) {
-				return false;
+			if(this.debug)System.out.println("\n"+color+" fig="+this.getFigureFromPos(pos, color).identifier+" pos "+pos.x+","+pos.y+"  dest "+dests[i].x+","+dests[i].y+"\n");
+			String tmpBoard = this.board;
+			if ( general.isValidMove(move, board)){
+				general.applyMove(move, board);
+				if(!this.isReachable(dests[i], col) ) {
+					this.board = tmpBoard;
+					return false;
+				}			
 			}
+			this.board = tmpBoard;
 		}
 		
 		return true;
@@ -402,12 +407,17 @@ public class XiangqiGame extends Game implements Serializable {
 		if (valid) {
 			this.history.add(new Move(moveString, this.board, player));
 			this.board = figure.applyMove(p, this.board);
-			
+			if(this.debug)System.out.println("\n\n2ndCHECK\n\n");
+			boolean killbill = isInCheckmate(nextPlayer); 
+			if(this.debug)System.out.println("Enemy of "+color+" in checkmate? "+killbill);
+			if(isInCheckmate(nextPlayer)) {this.regularGameEnd(player);return false;}
 			if (player == this.redPlayer) {	nextPlayer = this.blackPlayer; 	} else {nextPlayer = this.redPlayer;}
 			if(this.debug) {
 				if(this.nextPlayer.equals(this.redPlayer))System.out.println("NEXT -> RED"); 
 				if(this.nextPlayer.equals(this.blackPlayer))System.out.println("NEXT -> BLACK");
 			}
+			
+			
 		}
 		updateBoardRows();
 		if(this.debug)System.out.println(this.board);
