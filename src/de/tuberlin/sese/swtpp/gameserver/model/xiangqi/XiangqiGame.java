@@ -233,30 +233,14 @@ public class XiangqiGame extends Game implements Serializable {
 		char f = boardRows[9 - pos.y].charAt(pos.x);
 		Figures fig;
 		switch (Character.toLowerCase(f)) {
-		case 'g':
-			fig = new General(playerColor);
-			break;
-		case 'a':
-			fig = new Advisor(playerColor);
-			break;
-		case 'e':
-			fig = new Elephant(playerColor);
-			break;
-		case 'h':
-			fig = new Horse(playerColor);
-			break;
-		case 'r':
-			fig = new Rook(playerColor);
-			break;
-		case 'c':
-			fig = new Cannon(playerColor);
-			break;
-		case 's':
-			fig = new Soldier(playerColor);
-			break;
-		default:
-			fig = new Figures("null", 'n');
-			break;
+		case 'g': fig = new General(playerColor);break;
+		case 'a': fig = new Advisor(playerColor);break;
+		case 'e': fig = new Elephant(playerColor);break;
+		case 'h': fig = new Horse(playerColor);break;
+		case 'r': fig = new Rook(playerColor);break;
+		case 'c': fig = new Cannon(playerColor);break;
+		case 's': fig = new Soldier(playerColor);break;
+		default: fig = new Figures("null", 'n');break;
 		}
 		return fig;	
 	}
