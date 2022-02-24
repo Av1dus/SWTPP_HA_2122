@@ -139,8 +139,9 @@ public class TryMoveIntegrationTest {
 	@Test
 	public void blackStartAndWin()
 	{
-		startGame("3g5/9/9/9/9/9/9/9/rr7/4G4", false); //red starts
+		startGame("3g5/9/9/9/9/9/9/9/rr7/4G4", false); //black starts
 		assertMove("a1-a0", false, true);
+		
 		assertGameState("3g5/9/9/9/9/9/9/9/1r7/r3G4", true, true, false);		
 	}
 	
@@ -148,22 +149,11 @@ public class TryMoveIntegrationTest {
 	public void redStartAndWin()
 	{	
 		
-		startGame("3g5/RR7/9/9/9/9/9/9/5G3/9", false); //red starts
-		game.debug=true;
+		startGame("3g5/RR7/9/9/9/9/9/9/5G3/9", true); //red starts
+		
 		assertMove("a8-a9", true, true);
 		
-		assertGameState("R2g5/1R7/9/9/9/9/9/9/5G3/9", false, false, false);
-		System.out.println(game.getBoard());
-		System.out.println(game.getNextPlayer() == redPlayer);
-		System.out.println(game.isFinished());
-		System.out.println(redPlayer.isWinner());
-		game.debug=false;
-		
-		assertMove("d9-e9", false, false);
-		
-		assertGameState("R2g5/1R7/9/9/9/9/9/9/5G3/9", false, false, false);
-		
-		
+		assertGameState("R2g5/1R7/9/9/9/9/9/9/5G3/9", false, true, true);		
 	}
 	
 	@Test
@@ -225,7 +215,14 @@ public class TryMoveIntegrationTest {
 		assertMove("e4-d5", false, false); 
 		assertMove("e4-f5", false, false);
 		assertMove("e4-e4", false, false);
-		assertGameState("3g5/9/9/9/9/9/4s4/9/9/5G3", true, false, false);
+		game.debug=true;
+		
+		System.out.println(game.getBoard());
+		System.out.println(game.getNextPlayer() == redPlayer);
+		System.out.println(game.isFinished());
+		System.out.println(redPlayer.isWinner());
+		assertGameState("3g5/9/9/9/9/4s4/9/9/9/5G3", false, false, false);
+		game.debug=false;
 	}
 	
 	@Test

@@ -321,7 +321,6 @@ public class XiangqiGame extends Game implements Serializable {
 		
 		for ( Pair p : figures ) {
 			Figures f = this.getFigureFromPos(p, color);
-			if(this.debug) System.out.println(color+" "+f.identifier+" @ "+p.x+","+p.y + " valid? "+ f.isValidMove(new Points(p, pos), board));
 			if ( f.isValidMove(new Points(p, pos), board) ) {
 				return true;
 			}
@@ -331,34 +330,33 @@ public class XiangqiGame extends Game implements Serializable {
 	}
 	
 	public boolean isInCheckmate(Player pl) {
-		String color = "";
-		if (pl.equals(this.redPlayer))
-			color = "red";
-		else
-			color = "black";
+		String tmpBoard = "";
+		String color = pl.equals(this.redPlayer) ? "red" : "black";
+		String col = color.equals("red") ? "black" : "red"; 
 		updateBoardRows();
 		
 		Pair pos = this.posOfGeneral(color);
 		Figures general = this.getFigureFromPos(pos, color);
 		Pair[] dests = {
+				
 				new Pair(pos.x + 1, pos.y),
 				new Pair(pos.x - 1, pos.y),
-				new Pair(pos.x, pos.y + 1),
-				new Pair(pos.x, pos.y - 1) };
-		String col = color.equals("red") ? "black" : "red";
+				new Pair(pos.x, pos.y + 1 > 9 ? 9: pos.y +1),
+				new Pair(pos.x, pos.y - 1 < 0 ? 0: pos.y -1)};
+		
 		for ( int i = 0; i < 4; ++i ) {
 			Points move = new Points(pos, dests[i]);
-			if(this.debug)System.out.println("\n"+color+" fig="+this.getFigureFromPos(pos, color).identifier+" pos "+pos.x+","+pos.y+"  dest "+dests[i].x+","+dests[i].y+"\n");
-			String tmpBoard = this.board;
-			if ( general.isValidMove(move, board)){
-				general.applyMove(move, board);
+			tmpBoard = this.board;
+			if ( general.isValidMove(move, this.board)){
+				this.board = general.applyMove(move, board);
 				if(!this.isReachable(dests[i], col) ) {
 					this.board = tmpBoard;
 					return false;
-				}			
+				}
 			}
 			this.board = tmpBoard;
 		}
+		this.board = tmpBoard;
 		
 		return true;
 	}
@@ -373,18 +371,12 @@ public class XiangqiGame extends Game implements Serializable {
 
 	@Override
 	public boolean tryMove(String moveString, Player player) {
-		if(this.debug){
-			if(player == this.blackPlayer) System.out.println("blackplayer");
-			if(player == this.redPlayer) System.out.println("redplayer");
-		}
+		
 		dummy();
-		if(isInCheckmate(player)) {this.regularGameEnd(nextPlayer);return false;}
-		String color = "";
-		if (player.equals(this.redPlayer))
-			color = "red";
-		else
-			color = "black";
-
+		if(isInCheckmate(player)) {if(this.regularGameEnd(nextPlayer))return true;}
+		String color = player.equals(this.redPlayer) ? "red" : "black";
+		Player opponent = player.equals(this.redPlayer) ?  this.blackPlayer : this.redPlayer;
+		
 		if (!validateMoveString(moveString))
 			return false;
 
@@ -393,34 +385,21 @@ public class XiangqiGame extends Game implements Serializable {
 		boolean is_red = Character.isUpperCase(getBoardRows()[9 - field.y].charAt(field.x)) && color.equals("red");
 		boolean is_black = Character.isLowerCase(getBoardRows()[9 - field.y].charAt(field.x)) && color.equals("black");
 		Figures figure = getFigureFromPos(field, color);
-		if (!(is_red ^ is_black))
-			return false;
-		if(this.debug)		{
-			System.out.print("Figure : " +figure.identifier+ " Move = ");
-			System.out.print("|"+moveString+"|");
-		}
+		if (!(is_red ^ is_black)) return false;
+		
 			
 		Points p = new Points(getFieldValue(fields[0]), getFieldValue(fields[1]));
 		boolean valid = figure.isValidMove(p, this.board);
-		if(this.debug)System.out.print(" -> valid? " + valid +"  ");
-
+		
 		if (valid) {
 			this.history.add(new Move(moveString, this.board, player));
 			this.board = figure.applyMove(p, this.board);
-			if(this.debug)System.out.println("\n\n2ndCHECK\n\n");
-			boolean killbill = isInCheckmate(nextPlayer); 
-			if(this.debug)System.out.println("Enemy of "+color+" in checkmate? "+killbill);
-			if(isInCheckmate(nextPlayer)) {this.regularGameEnd(player);return false;}
-			if (player == this.redPlayer) {	nextPlayer = this.blackPlayer; 	} else {nextPlayer = this.redPlayer;}
-			if(this.debug) {
-				if(this.nextPlayer.equals(this.redPlayer))System.out.println("NEXT -> RED"); 
-				if(this.nextPlayer.equals(this.blackPlayer))System.out.println("NEXT -> BLACK");
-			}
 			
-			
+			boolean checkmate =isInCheckmate(opponent);
+			if(checkmate) {return this.regularGameEnd(player);}
+			if (player == this.redPlayer) {	nextPlayer = this.blackPlayer; 	} else {nextPlayer = this.redPlayer;}			
 		}
 		updateBoardRows();
-		if(this.debug)System.out.println(this.board);
 		return valid;
 	}
 
