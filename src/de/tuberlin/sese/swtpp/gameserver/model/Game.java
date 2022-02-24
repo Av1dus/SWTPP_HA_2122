@@ -23,6 +23,7 @@ public abstract class Game implements Serializable {
 	protected boolean draw = false; // draw game; must be finished
 	protected boolean surrendered = false; // someone gave up; must be finished
 	protected boolean deleted = false;
+	public boolean debug = false;
 
 	// associations
 	protected final List<Player> players = new LinkedList<>();

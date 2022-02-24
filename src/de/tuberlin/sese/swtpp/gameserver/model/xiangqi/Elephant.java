@@ -10,9 +10,9 @@ public class Elephant extends Figures {
 		Pair dif = p.absDifference();
 		Pair middle = this.meanField(p);
 		char middleFieldValue = this.getFieldValue(middle, board);
-
-		System.out.println(middle.toString());
-		System.out.println(middleFieldValue + " -> " + this.charIsFigure(middleFieldValue));
+		
+		//System.out.println(middle.toString());
+		//System.out.println(middleFieldValue + " -> " + this.charIsFigure(middleFieldValue));
 		
 		if (dif.x != 2 && dif.y != 2 && this.ownFigure(this.getFieldValue(p.e, board)))
 			return false;

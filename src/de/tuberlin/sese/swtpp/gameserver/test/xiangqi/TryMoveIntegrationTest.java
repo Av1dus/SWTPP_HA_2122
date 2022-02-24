@@ -75,5 +75,159 @@ public class TryMoveIntegrationTest {
 	}
 
 	// TODO: implement test cases of same kind as example here
+	@Test
+	public void soldierTest(){
+		startGame("rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR", true);
+		
+		assertMove("e3-e4", true, true); //RED
+		assertGameState("rheagaehr/9/1c5c1/s1s1s1s1s/9/4S4/S1S3S1S/1C5C1/9/RHEAGAEHR", false, false, false);
+		
+		assertMove("a6-a5", false, true); //BLACK
+		assertGameState("rheagaehr/9/1c5c1/2s1s1s1s/s8/4S4/S1S3S1S/1C5C1/9/RHEAGAEHR", true, false, false);
+		
+		assertMove("e4-e5", true, true);//RED
+		assertGameState("rheagaehr/9/1c5c1/2s1s1s1s/s3S4/9/S1S3S1S/1C5C1/9/RHEAGAEHR", false, false, false);
 
+		assertMove("a5-a4", false, true); //BLACK
+		assertGameState("rheagaehr/9/1c5c1/2s1s1s1s/4S4/s8/S1S3S1S/1C5C1/9/RHEAGAEHR", true, false, false);
+		
+		assertMove("e5-e6", true, true);//RED
+		assertGameState("rheagaehr/9/1c5c1/2s1S1s1s/9/s8/S1S3S1S/1C5C1/9/RHEAGAEHR", false, false, false);
+		
+		assertMove("a4-a3", false, true); //BLACK
+		assertGameState("rheagaehr/9/1c5c1/2s1S1s1s/9/9/s1S3S1S/1C5C1/9/RHEAGAEHR", true, false, false);
+		
+		assertMove("e6-d6", true, true);//RED
+		assertGameState("rheagaehr/9/1c5c1/2sS2s1s/9/9/s1S3S1S/1C5C1/9/RHEAGAEHR", false, false, false);
+		
+		assertMove("a3-a2", false, true); //BLACK
+		assertGameState("rheagaehr/9/1c5c1/2sS2s1s/9/9/2S3S1S/sC5C1/9/RHEAGAEHR", true, false, false);
+		
+		assertMove("d6-d5", true, false);//RED
+		
+		
+		assertMove("d6-c6", true, true);//RED
+		assertGameState("rheagaehr/9/1c5c1/2S3s1s/9/9/2S3S1S/sC5C1/9/RHEAGAEHR", false, false, false);
+		
+		assertMove("a2-a1", false, true); //BLACK
+		assertGameState("rheagaehr/9/1c5c1/2S3s1s/9/9/2S3S1S/1C5C1/s8/RHEAGAEHR", true, false, false);
+		
+		assertMove("c3-c4", true, true);//RED
+		assertGameState("rheagaehr/9/1c5c1/2S3s1s/9/2S6/6S1S/1C5C1/s8/RHEAGAEHR", false, false, false);
+		
+		assertMove("a1-a0", false, true); //BLACK
+		assertGameState("rheagaehr/9/1c5c1/2S3s1s/9/2S6/6S1S/1C5C1/9/sHEAGAEHR", true, false, false);
+		
+		assertMove("i6-i5", true, false);//RED
+		assertMove("c4-c5", true, true);//RED
+		assertGameState("rheagaehr/9/1c5c1/2S3s1s/2S6/9/6S1S/1C5C1/9/sHEAGAEHR", false, false, false);
+		
+		assertMove("\0\0\0\0\0", false, false); //BLACK
+		assertMove("xxxxx", false, false); //BLACK
+		assertMove("i0-i1", false, false);//BLACK
+		assertMove("aa-bbb", false, false); //BLACK
+		assertMove("aa-bb", false, false); //BLACK
+		assertMove("a0-bb", false, false); //BLACK
+		assertMove("a0-b0", false, true); //BLACK
+		assertGameState("rheagaehr/9/1c5c1/2S3s1s/2S6/9/6S1S/1C5C1/9/1sEAGAEHR", true, false, false);
+		
+		assertMove("c5-c6", true, false);//RED
+		assertMove("c6-d6", true, true);//RED
+		assertGameState("rheagaehr/9/1c5c1/3S2s1s/2S6/9/6S1S/1C5C1/9/1sEAGAEHR", false, false, false);
+	}
+	
+	@Test
+	public void blackStartAndWin()
+	{
+		startGame("3g5/9/9/9/9/9/9/9/rr7/4G4", false); //red starts
+		assertMove("a1-a0", false, true);
+		assertGameState("3g5/9/9/9/9/9/9/9/1r7/r3G4", true, true, false);
+	}
+	
+	@Test
+	public void redStartAndWin()
+	{
+		startGame("4g4/RR7/9/9/9/9/9/9/3G5/9", true); //red starts
+		assertMove("a8-a9", true, true);
+		assertGameState("R3g4/1R7/9/9/9/9/9/9/3G5/9", true, true, true);
+	}
+	
+	@Test
+	public void XiangqiGameTest()
+	{
+		
+		startGame("rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR", true);
+		assertMove("d4-d5", true, false); //no figure		
+		startGame("rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR", true);
+		assertMove("b2-b3", true, true); //CANNON
+		startGame("rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR", true);
+		assertMove("a0-a1", true, true); //ROOK		
+		startGame("rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR", true);
+		assertMove("b0-a2", true, true); //HORSE		
+		startGame("rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR", true);
+		assertMove("c0-a2", true, true); //ELEPHANT		
+		startGame("rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR", true);
+		assertMove("d0-e1", true, true); //ADVISOR		
+		startGame("rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR", true);
+		assertMove("e0-e1", true, true); //GENERAL
+		assertGameState("rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/4G4/RHEA1AEHR", false, false, false);
+	}
+	
+	@Test
+	public void SoldierTest_red()
+	{
+		startGame("rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR", true);
+		assertMove("e3-e3", true, false); 
+		assertMove("e3-d3", true, false); 
+		assertMove("e3-f3", true, false); 
+		assertMove("e3-d2", true, false); 
+		assertMove("e3-e2", true, false);
+		assertMove("e3-f2", true, false);
+		assertMove("e3-d4", true, false);
+		assertMove("e3-f4", true, false);
+		assertMove("e3-e4", true, true);
+		assertGameState("rheagaehr/9/1c5c1/s1s1s1s1s/9/4S4/S1S3S1S/1C5C1/9/RHEAGAEHR", false, false, false);
+	}
+	
+	@Test
+	public void SoldierTest_black()
+	{
+		startGame("rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR", false);
+		assertMove("e6-e6", false, false); 
+		assertMove("e6-d6", false, false); 
+		assertMove("e6-f6", false, false); 
+		assertMove("e6-d7", false, false); 
+		assertMove("e6-e7", false, false);
+		assertMove("e6-f7", false, false);
+		assertMove("e6-d5", false, false);
+		assertMove("e6-f5", false, false);
+		assertMove("e6-e5", false, true);
+		assertGameState("rheagaehr/9/1c5c1/s1s3s1s/4s4/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR", true, false, false);
+		startGame("9/9/9/9/9/9/9/9/4s4/9", false);
+		assertMove("e1-e1", false, false);  
+		assertMove("e1-d2", false, false); 
+		assertMove("e1-e2", false, false);
+		assertMove("e1-f2", false, false);
+		assertMove("e1-d0", false, false);
+		assertMove("e1-f0", false, false);
+		assertMove("e1-e0", false, true);
+		assertMove("e1-d1", false, false); 
+		assertMove("e1-f1", false, false);
+		assertGameState("9/9/9/9/9/9/9/9/9/4s4", true, false, false);
+	}
+	
+	@Test
+	public void ElephantTest()
+	{
+		startGame("2e6/3s5/S2ss4/9/9/9/9/9/9/9", false);
+		assertMove("c9-f4", false, false); //FFF
+		assertMove("c9-f4", false, false); //FFT
+		assertMove("c9-f4", false, false); //FTF
+		assertMove("c9-f4", false, false); //FTT
+		assertMove("c9-d4", false, false); //TFF
+		game.debug=true;
+		assertMove("c9-d7", false, true); //TFT  -> FALSE RESOLUTION
+		assertMove("c9-e7", false, false); //TTF
+		assertMove("c9-a7", false, true); //TTT
+	}
 }

@@ -14,7 +14,6 @@ public class General extends Figures {
 		else
 			return false;
 	}
-	
 	@Override
 	public boolean isValidMove(Points p, String board) {
 		Pair dif = p.absDifference();

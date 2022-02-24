@@ -5,7 +5,7 @@ public class Soldier extends Figures {
 	public Soldier(String p) {
 		super(p, 's');
 	}
-
+	
 	@Override
 	public boolean isValidMove(Points p, String board) {
 		Pair absDif = p.absDifference();
@@ -22,14 +22,12 @@ public class Soldier extends Figures {
 			} else {
 				return valid_horizontal_move ^ (valid_vertical_move && dif.y > 0);
 			}
-		} else if (this.player.equals("black")) {
+		} else {
 			if (p.s.y > 4) {
 				return valid_vertical_move && dif.y < 0;
 			} else {
 				return valid_horizontal_move ^ (valid_vertical_move && dif.y < 0);
 			}
 		}
-		
-		return false;
 	}
 }

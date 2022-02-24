@@ -41,12 +41,12 @@ public class Rook extends Figures {
 		line = line.substring(subRange.x, subRange.y + 1);
 		int figuresOnSubrange = this.countFigures(line);
 		
-		System.out.println(!this.ownFigure(targetField));
-		System.out.println(this.identifier);
-		System.out.println(targetField + ", count: " + figuresOnSubrange);
+		//System.out.println(!this.ownFigure(targetField));
+		//System.out.println(this.identifier);
+		//System.out.println(targetField + ", count: " + figuresOnSubrange);
 		
 		if (!this.ownFigure(targetField)) {
-			System.out.println(line);
+			//System.out.println(line);
 			if (this.charIsFigure(targetField)) {
 				return figuresOnSubrange == 2; // own figure + target figure
 			} else {

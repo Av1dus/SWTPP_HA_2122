@@ -20,7 +20,6 @@ public class Cannon extends Figures {
 		return result;
 	}
 	
-	@Override
 	public boolean isValidMove(Points p, String board) {
 		String line = "";
 		char targetField = this.getFieldValue(p.e, board);
@@ -40,13 +39,13 @@ public class Cannon extends Figures {
 		
 		line = line.substring(subRange.x, subRange.y + 1);
 		int figuresOnSubrange = this.countFigures(line);
-		
+		/*
 		System.out.println(!this.ownFigure(targetField));
 		System.out.println(this.identifier);
 		System.out.println(targetField + ", count: " + figuresOnSubrange);
-		
+		*/
 		if (!this.ownFigure(targetField)) {
-			System.out.println(line);
+			//System.out.println(line);
 			if (this.charIsFigure(targetField)) {
 				return figuresOnSubrange == 3; // own figure + target figure + figure between
 			} else {

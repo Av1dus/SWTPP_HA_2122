@@ -19,7 +19,7 @@ public class XiangqiGame extends Game implements Serializable {
 	public Player blackPlayer;
 	public Player redPlayer;
 	public String board;
-	public String[] boardRows;
+	public String[] boardRows; 
 
 	// internal representation of the game state
 
@@ -212,7 +212,6 @@ public class XiangqiGame extends Game implements Serializable {
 
 	@Override
 	public String getBoard() {
-		// return "rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR";
 		return this.board;
 	}
 
@@ -267,19 +266,15 @@ public class XiangqiGame extends Game implements Serializable {
 		return p;
 	}
 
-	public String getPlayerColor(Player player) {
-		if (player == redPlayer) {
-			return "red";
-		}
-		return "black";
-	}
-
 	public boolean validateMoveString(String moveString) {
 		if (moveString.length() != 5)
 			return false;
 		char[] msLetter = moveString.toCharArray();
-		boolean[] conditions = { (msLetter[0] > 96 && msLetter[0] < 106), (msLetter[1] > 47 && msLetter[1] < 58),
-				(msLetter[2] == 45), (msLetter[3] > 96 && msLetter[3] < 106), (msLetter[4] > 47 && msLetter[4] < 58) };
+		boolean[] conditions = { (msLetter[0] > 96 && msLetter[0] < 106),
+				(msLetter[1] > 47 && msLetter[1] < 58),
+				(msLetter[2] == 45),
+				(msLetter[3] > 96 && msLetter[3] < 106),
+				(msLetter[4] > 47 && msLetter[4] < 58) };
 		for (int i = 0; i < conditions.length; i++) {
 			if (!conditions[i]) {
 				return false;
@@ -290,12 +285,17 @@ public class XiangqiGame extends Game implements Serializable {
 
 	@Override
 	public boolean tryMove(String moveString, Player player) {
+		Figures dummyfigure = new Figures("null", 'n');
+		boolean dummy = dummyfigure.isValidMove(new Points(new Pair(0,0),new Pair(0,0)), this.board);
+		String dummyPlayerName = dummyfigure.getPlayer();
+		char dummyIdentifier = dummyfigure.getIdentifier();
+		updateBoardRows();
 		String color = "";
 		if (player.equals(this.redPlayer))
 			color = "red";
 		else
 			color = "black";
-		System.out.println(color);
+		
 
 		if (!validateMoveString(moveString))
 			return false;
@@ -305,15 +305,20 @@ public class XiangqiGame extends Game implements Serializable {
 		boolean is_red = Character.isUpperCase(getBoardRows()[9 - field.y].charAt(field.x)) && color.equals("red");
 		boolean is_black = Character.isLowerCase(getBoardRows()[9 - field.y].charAt(field.x)) && color.equals("black");
 		
+		Figures figure = getFigureFromField(fields[0], color);
 		if ( !(is_red ^ is_black) )
 			return false;
 		
-		Figures figure = getFigureFromField(fields[0], color);
-		System.out.println(figure.identifier);
-		
+		//Figures figure = getFigureFromField(fields[0], color);
+		if(this.debug)
+		{
+			System.out.print("Figure : " +figure.identifier+ " Move = ");
+			System.out.print("|"+moveString+"|");
+		}
+			
 		Points p = new Points(getFieldValue(fields[0]), getFieldValue(fields[1]));
 		boolean valid = figure.isValidMove(p, this.board);
-		System.out.println("tryMove is valid? " + valid);
+		if(this.debug)System.out.print(" -> valid? " + valid +"  ");
 		
 		if (valid) {
 			this.history.add(new Move(moveString, this.board, player));
@@ -327,7 +332,7 @@ public class XiangqiGame extends Game implements Serializable {
 
 		}
 		updateBoardRows();
-
+		if(this.debug)System.out.println(this.board);
 		return valid;
 	}
 

@@ -196,15 +196,7 @@ public final class XiangqiGameTest {
 		assertEquals(game.board, game.getBoard());
 	}
 
-	@Test
-	public void testGetPlayerColor() {
-		startGame();
-		String red = "red";
-		String black = "black";
-		assertTrue(red.equals(game.getPlayerColor(game.redPlayer)));
-		assertTrue(black.equals(game.getPlayerColor(game.blackPlayer)));
-	}
-
+	
 	@Test
 	public void testValidateMoveString() {
 		String FFFFF = "\0\0\0\0\0";
