@@ -32,7 +32,8 @@ public class Cannon extends Figures {
 		if (dif.y == 0) {
 			subRange = minmax(p.s.x, p.e.x); // (x == lower, y == upper) see 'minmax'
 			line = this.expandRow(new StringBuilder(board.split("/")[9 - p.e.y])).toString();
-		} else {
+		}
+		else {
 			subRange = minmax(p.s.y, p.e.y);
 			line = this.getBoardCollumn(board, p.s.x);
 		}

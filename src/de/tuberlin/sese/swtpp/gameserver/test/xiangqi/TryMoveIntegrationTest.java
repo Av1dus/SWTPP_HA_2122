@@ -139,9 +139,11 @@ public class TryMoveIntegrationTest {
 	@Test
 	public void blackStartAndWin()
 	{
+		
 		startGame("3g5/9/9/9/9/9/9/9/rr7/4G4", false); //red starts
 		assertMove("a1-a0", false, true);
 		assertGameState("3g5/9/9/9/9/9/9/9/1r7/r3G4", true, true, false);
+		
 	}
 	
 	@Test
@@ -171,11 +173,13 @@ public class TryMoveIntegrationTest {
 		startGame("rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR", true);
 		assertMove("e0-e1", true, true); //GENERAL
 		assertGameState("rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/4G4/RHEA1AEHR", false, false, false);
+	
+		
 	}
 	
 	@Test
 	public void SoldierTest_red()
-	{
+	{	
 		startGame("rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR", true);
 		assertMove("e3-e3", true, false); 
 		assertMove("e3-d3", true, false); 
@@ -187,6 +191,7 @@ public class TryMoveIntegrationTest {
 		assertMove("e3-f4", true, false);
 		assertMove("e3-e4", true, true);
 		assertGameState("rheagaehr/9/1c5c1/s1s1s1s1s/9/4S4/S1S3S1S/1C5C1/9/RHEAGAEHR", false, false, false);
+		
 	}
 	
 	@Test
@@ -218,16 +223,24 @@ public class TryMoveIntegrationTest {
 	
 	@Test
 	public void ElephantTest()
-	{
-		startGame("2e6/3s5/S2ss4/9/9/9/9/9/9/9", false);
+	{	
+		startGame("2e2g3/3s5/S2ss4/9/9/9/9/9/9/4G4", false);
 		assertMove("c9-f4", false, false); //FFF
 		assertMove("c9-f4", false, false); //FFT
 		assertMove("c9-f4", false, false); //FTF
 		assertMove("c9-f4", false, false); //FTT
 		assertMove("c9-d4", false, false); //TFF
-		game.debug=true;
+		
 		assertMove("c9-d7", false, true); //TFT  -> FALSE RESOLUTION
+		startGame("2e2g3/3s5/S2ss4/9/9/9/9/9/9/4G4", false);
 		assertMove("c9-e7", false, false); //TTF
 		assertMove("c9-a7", false, true); //TTT
+		
+	}
+	
+	@Test
+	public void CannonTest()
+	{
+		
 	}
 }
