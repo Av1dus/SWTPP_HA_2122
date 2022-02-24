@@ -307,9 +307,7 @@ public class XiangqiGame extends Game implements Serializable {
 			for (int y = 0; y < 10; ++y) {
 				Pair temp = new Pair(x, y);
 				Figures f = this.getFigureFromPos(temp, color);
-				
 				if (f.player.equals(color)) result.add(temp);	
-				
 			}
 		}
 		
@@ -369,38 +367,34 @@ public class XiangqiGame extends Game implements Serializable {
 		char dummyIdentifier = dummyfigure.getIdentifier();
 	}
 
+	public boolean correctFigure(Pair field, String color)
+	{
+		boolean is_red = Character.isUpperCase(this.boardRows[9 - field.y].charAt(field.x)) && color.equals("red");
+		boolean is_black = Character.isLowerCase(this.boardRows[9 - field.y].charAt(field.x)) && color.equals("black");
+		return is_red ^ is_black;
+	}
+	
 	@Override
 	public boolean tryMove(String moveString, Player player) {
-		
-		dummy();
-		if(isInCheckmate(player)) {if(this.regularGameEnd(nextPlayer))return true;}
+		//dummy();
+		if(isInCheckmate(player)) return this.regularGameEnd(nextPlayer);
 		String color = player.equals(this.redPlayer) ? "red" : "black";
 		Player opponent = player.equals(this.redPlayer) ?  this.blackPlayer : this.redPlayer;
-		
-		if (!validateMoveString(moveString))
-			return false;
-
+		if (!validateMoveString(moveString)) return false;
 		String[] fields = moveString.split("-");
 		Pair field = getFieldValue(fields[0]);
-		boolean is_red = Character.isUpperCase(getBoardRows()[9 - field.y].charAt(field.x)) && color.equals("red");
-		boolean is_black = Character.isLowerCase(getBoardRows()[9 - field.y].charAt(field.x)) && color.equals("black");
-		Figures figure = getFigureFromPos(field, color);
-		if (!(is_red ^ is_black)) return false;
-		
-			
+		if(!correctFigure(field,color)) return false;
+		Figures figure = getFigureFromPos(field, color);	
 		Points p = new Points(getFieldValue(fields[0]), getFieldValue(fields[1]));
-		boolean valid = figure.isValidMove(p, this.board);
-		
-		if (valid) {
+		if (figure.isValidMove(p, this.board)) {
 			this.history.add(new Move(moveString, this.board, player));
 			this.board = figure.applyMove(p, this.board);
-			
-			boolean checkmate =isInCheckmate(opponent);
+			boolean checkmate = isInCheckmate(opponent);
 			if(checkmate) {return this.regularGameEnd(player);}
-			if (player == this.redPlayer) {	nextPlayer = this.blackPlayer; 	} else {nextPlayer = this.redPlayer;}			
-		}
-		updateBoardRows();
-		return valid;
+			if (player == this.redPlayer) {	nextPlayer = this.blackPlayer; 	} else {nextPlayer = this.redPlayer;}	
+			updateBoardRows();
+			return true;
+		}return false;
 	}
 
 }
