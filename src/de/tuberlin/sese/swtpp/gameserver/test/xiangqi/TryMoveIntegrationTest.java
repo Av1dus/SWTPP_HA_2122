@@ -76,90 +76,56 @@ public class TryMoveIntegrationTest {
 
 	// TODO: implement test cases of same kind as example here
 	@Test
-	public void soldierTest(){
+	public void defaultTest(){
 		startGame("rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR", true);
-		
 		assertMove("e3-e4", true, true); //RED
 		assertGameState("rheagaehr/9/1c5c1/s1s1s1s1s/9/4S4/S1S3S1S/1C5C1/9/RHEAGAEHR", false, false, false);
-		
 		assertMove("a6-a5", false, true); //BLACK
 		assertGameState("rheagaehr/9/1c5c1/2s1s1s1s/s8/4S4/S1S3S1S/1C5C1/9/RHEAGAEHR", true, false, false);
-		
 		assertMove("e4-e5", true, true);//RED
 		assertGameState("rheagaehr/9/1c5c1/2s1s1s1s/s3S4/9/S1S3S1S/1C5C1/9/RHEAGAEHR", false, false, false);
-
 		assertMove("a5-a4", false, true); //BLACK
 		assertGameState("rheagaehr/9/1c5c1/2s1s1s1s/4S4/s8/S1S3S1S/1C5C1/9/RHEAGAEHR", true, false, false);
-		
 		assertMove("e5-e6", true, true);//RED
 		assertGameState("rheagaehr/9/1c5c1/2s1S1s1s/9/s8/S1S3S1S/1C5C1/9/RHEAGAEHR", false, false, false);
-		
 		assertMove("a4-a3", false, true); //BLACK
 		assertGameState("rheagaehr/9/1c5c1/2s1S1s1s/9/9/s1S3S1S/1C5C1/9/RHEAGAEHR", true, false, false);
-		
 		assertMove("e6-d6", true, true);//RED
 		assertGameState("rheagaehr/9/1c5c1/2sS2s1s/9/9/s1S3S1S/1C5C1/9/RHEAGAEHR", false, false, false);
-		
 		assertMove("a3-a2", false, true); //BLACK
 		assertGameState("rheagaehr/9/1c5c1/2sS2s1s/9/9/2S3S1S/sC5C1/9/RHEAGAEHR", true, false, false);
-		
 		assertMove("d6-d5", true, false);//RED
-		
-		
 		assertMove("d6-c6", true, true);//RED
 		assertGameState("rheagaehr/9/1c5c1/2S3s1s/9/9/2S3S1S/sC5C1/9/RHEAGAEHR", false, false, false);
-		
 		assertMove("a2-a1", false, true); //BLACK
 		assertGameState("rheagaehr/9/1c5c1/2S3s1s/9/9/2S3S1S/1C5C1/s8/RHEAGAEHR", true, false, false);
-		
-		assertMove("c3-c4", true, true);//RED
-		assertGameState("rheagaehr/9/1c5c1/2S3s1s/9/2S6/6S1S/1C5C1/s8/RHEAGAEHR", false, false, false);
-		
-		assertMove("a1-a0", false, true); //BLACK
-		assertGameState("rheagaehr/9/1c5c1/2S3s1s/9/2S6/6S1S/1C5C1/9/sHEAGAEHR", true, false, false);
-		
-		assertMove("i6-i5", true, false);//RED
-		assertMove("c4-c5", true, true);//RED
-		assertGameState("rheagaehr/9/1c5c1/2S3s1s/2S6/9/6S1S/1C5C1/9/sHEAGAEHR", false, false, false);
-		
-		assertMove("\0\0\0\0\0", false, false); //BLACK
-		assertMove("xxxxx", false, false); //BLACK
-		assertMove("i0-i1", false, false);//BLACK
-		assertMove("aa-bbb", false, false); //BLACK
-		assertMove("aa-bb", false, false); //BLACK
-		assertMove("a0-bb", false, false); //BLACK
-		assertMove("a0-b0", false, true); //BLACK
-		assertGameState("rheagaehr/9/1c5c1/2S3s1s/2S6/9/6S1S/1C5C1/9/1sEAGAEHR", true, false, false);
-		
-		assertMove("c5-c6", true, false);//RED
-		assertMove("c6-d6", true, true);//RED
-		assertGameState("rheagaehr/9/1c5c1/3S2s1s/2S6/9/6S1S/1C5C1/9/1sEAGAEHR", false, false, false);
 	}
 	
 	@Test
 	public void blackStartAndWin()
 	{
-		startGame("3g5/9/9/9/9/9/9/9/rr7/4G4", false); //black starts
-		assertMove("a1-a0", false, true);
-		
-		assertGameState("3g5/9/9/9/9/9/9/9/1r7/r3G4", true, true, false);		
+		startGame("3g5/9/9/9/9/9/9/9/rr7/4G4", false); //black starts		
+		assertMove("a1-a0", false, true);		
+		assertGameState("3g5/9/9/9/9/9/9/9/1r7/r3G4", true, true, false);
+		startGame("R2g5/1R7/9/9/9/9/9/9/5G3/9",false);
+		assertMove("d9-d8", false, false);
 	}
 	
 	@Test
 	public void redStartAndWin()
 	{	
 		
-		startGame("3g5/RR7/9/9/9/9/9/9/5G3/9", true); //red starts
-		
-		assertMove("a8-a9", true, true);
-		
+		startGame("3g5/RR7/9/9/9/9/9/9/5G3/9", true); //red starts		
+		assertMove("a8-a9", true, true);		
 		assertGameState("R2g5/1R7/9/9/9/9/9/9/5G3/9", false, true, true);		
+		startGame("3g5/9/9/9/9/9/9/9/1r7/r3G4", false); //black starts
+		assertMove("f1-f0", true, false);
+		
 	}
 	
 	@Test
 	public void XiangqiGameTest()
 	{
-		
 		startGame("rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR", true);
 		assertMove("d4-d5", true, false); //no figure		
 		startGame("rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR", true);
@@ -172,11 +138,7 @@ public class TryMoveIntegrationTest {
 		assertMove("c0-a2", true, true); //ELEPHANT		
 		startGame("rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR", true);
 		assertMove("d0-e1", true, true); //ADVISOR		
-		startGame("rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR", true);
-		assertMove("e0-e1", true, true); //GENERAL
-		assertGameState("rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/4G4/RHEA1AEHR", false, false, false);
-	
-		
+		assertGameState("rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/4A4/RHE1GAEHR", false, false, false);	
 	}
 	
 	@Test
@@ -233,9 +195,9 @@ public class TryMoveIntegrationTest {
 		startGame("2e2g3/3s5/3ss4/9/9/9/9/9/9/4G4", false);
 		assertMove("c9-c6", false, false); //TTT
 		startGame("2e2s3/3sg4/s2ss4/9/9/9/9/9/9/4G4", false);
-		game.debug=true;
+		
 		assertMove("c9-a7", false, false);
-		game.debug=false;
+		
 		startGame("2e2s3/3s1g3/s2s5/9/6s2/9/9/9/9/4G4", false);
 		assertMove("c9-e9", false, false);
 		assertGameState("2e2s3/3s1g3/s2s5/9/6s2/9/9/9/9/4G4", false, false, false);
@@ -259,16 +221,76 @@ public class TryMoveIntegrationTest {
 	@Test
 	public void GeneralTest()
 	{
-		
-		startGame("9/4g4/9/9/9/9/9/9/9/3G5", true);
-		assertMove("d0-c0", true, false);
+		startGame("9/9/3g5/9/9/9/9/4G4/9/9", false);
+		assertMove("d7-a7", false, false);
+		assertMove("d7-i7", false, false);
+		assertMove("d7-d7", false, false);
+		assertMove("d7-d6", false, false);
+		startGame("9/4g4/9/9/9/9/9/3G5/9/9", true);
+		assertMove("d2-a2", true, false);
+		assertMove("d2-i2", true, false);
+		assertMove("d2-d6", true, false);
+		assertMove("d2-c3", true, false);
+		assertMove("d2-e3", true, false);
 		startGame("9/4g4/9/9/9/9/9/9/9/5G3", true);
 		assertMove("f0-g0", true, false);
 		startGame("9/4g4/9/9/9/9/9/9/9/5G3", true);
-		assertMove("f0-e0", true, true);
+		
+		assertMove("f0-e0", true, false);
 		startGame("9/4g4/9/9/9/9/9/9/9/5G3", false);
-		assertMove("e8-f8", false ,false);
 		
-		
+		assertMove("e8-d8", false ,true);
+		assertGameState("9/3g5/9/9/9/9/9/9/9/5G3", true, false, false);		
+	}
+	
+	@Test
+	public void RookTest()
+	{
+		startGame("3g5/9/9/9/9/9/9/9/rr7/4G4", false);
+		assertMove("a1-b1",false,false);
+		startGame("3g5/S8/9/9/9/9/9/9/rr7/4G4", false);
+		assertMove("a1-a8",false,true);
+		startGame("3g5/S8/S8/9/9/9/9/9/rr7/4G4", false);
+		assertMove("a1-a9",false,false);
+		assertGameState("3g5/S8/S8/9/9/9/9/9/rr7/4G4", false, false, false);
+	}
+	
+	@Test
+	public void CannonTest()
+	{
+		startGame("3g5/S8/s8/s8/9/9/9/9/cr6S/4G4", false);
+		assertMove("a1-b1",false,false);
+		assertMove("a1-a8",false,false);
+		assertMove("a1-h1",false,false);
+		assertMove("a1-i1",false,true);
+		startGame("3g5/S8/s8/s8/9/9/9/9/cr6S/4G4", false);
+		assertMove("a1-i1",false,true);
+		startGame("3g5/S8/s8/s8/9/9/9/9/1r5cS/4G4", false);
+		assertMove("h1-a1",false,false);
+		assertGameState("3g5/S8/s8/s8/9/9/9/9/1r5cS/4G4", false, false, false);
+	}
+	
+	@Test
+	public void AdvisorTest()
+	{
+		startGame("3g5/4a4/9/9/9/9/9/9/9/4G4", false);
+		assertMove("e8-d9",false,false);
+		assertMove("e8-f6",false,false);
+		assertMove("e8-i8",false,false);
+		assertMove("e8-a8",false,false);
+		assertMove("e8-f7",false,true);
+		startGame("4g4/9/9/9/9/9/9/9/4A4/3G5", true);
+		assertMove("e1-a1",true,false);
+		assertMove("e1-i1",true,false);
+		assertMove("e1-e5",true,false);
+		assertMove("e1-d0",true,false);
+		assertMove("e1-f0",true,true);		
+		startGame("4g4/9/9/9/9/9/6s2/5A3/9/3G5", true);
+		assertMove("f2-g3",true,false);
+		assertMove("f2-f1",true,false);
+		assertMove("f2-d1",true,false);
+		startGame("4g4/9/9/9/9/9/9/5s3/4A4/3G5", true);
+		assertMove("e1-f2",true,true);
+		assertGameState("4g4/9/9/9/9/9/9/5A3/9/3G5", false, false, false);		
 	}
 }

@@ -211,41 +211,7 @@ public final class XiangqiGameTest {
 		assertFalse(game.validateMoveString(TFTTF));
 	}
 
-	@Test
-	public void testGetFigureFromField() {
-		game.setBoard("rheagaehr/9/1c5c1/s1s1s1s1s/9/9/S1S1S1S1S/1C5C1/9/RHEAGAEHR");
-		Figures fig = new General("red");
-		assertEquals(fig.getPlayer(), (game.getFigureFromField("e0", "red")).getPlayer());
-		assertEquals(fig.getIdentifier(), (game.getFigureFromField("e0", "red")).getIdentifier());
-
-		fig = new Advisor("red");
-		assertEquals(fig.getPlayer(), (game.getFigureFromField("d0", "red")).getPlayer());
-		assertEquals(fig.getIdentifier(), (game.getFigureFromField("d0", "red")).getIdentifier());
-
-		fig = new Elephant("red");
-		assertEquals(fig.getPlayer(), (game.getFigureFromField("c0", "red")).getPlayer());
-		assertEquals(fig.getIdentifier(), (game.getFigureFromField("c0", "red")).getIdentifier());
-
-		fig = new Horse("red");
-		assertEquals(fig.getPlayer(), (game.getFigureFromField("b0", "red")).getPlayer());
-		assertEquals(fig.getIdentifier(), (game.getFigureFromField("b0", "red")).getIdentifier());
-
-		fig = new Rook("red");
-		assertEquals(fig.getPlayer(), (game.getFigureFromField("a0", "red")).getPlayer());
-		assertEquals(fig.getIdentifier(), (game.getFigureFromField("a0", "red")).getIdentifier());
-
-		fig = new Cannon("red");
-		assertEquals(fig.getPlayer(), (game.getFigureFromField("b2", "red")).getPlayer());
-		assertEquals(fig.getIdentifier(), (game.getFigureFromField("b2", "red")).getIdentifier());
-
-		fig = new Soldier("red");
-		assertEquals(fig.getPlayer(), (game.getFigureFromField("a3", "red")).getPlayer());
-		assertEquals(fig.getIdentifier(), (game.getFigureFromField("a3", "red")).getIdentifier());
-
-		fig = new Figures("null", 'n');
-		assertEquals(fig.getPlayer(), (game.getFigureFromField("b3", "red")).getPlayer());
-		assertEquals(fig.getIdentifier(), (game.getFigureFromField("b3", "red")).getIdentifier());
-	}
+	
 
 	@Test
 	public void testTryMove() {

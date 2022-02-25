@@ -8,18 +8,7 @@ public class Rook extends Figures {
 	private Pair minmax( int left, int right ) {
 		return left < right ? new Pair(left, right) : new Pair(right, left);
 	}
-	
-	private int countFigures(String figs) {
-		int result = 0;
 		
-		for ( char c : figs.toCharArray() ) {
-			if ( this.charIsFigure(c) )
-				++result;
-		}
-		
-		return result;
-	}
-	
 	@Override
 	public boolean isValidMove(Points p, String board) {
 		String line = "";
@@ -30,14 +19,20 @@ public class Rook extends Figures {
 				^ dif.y == 0) 
 				|| this.ownFigure(targetField))
 			return false;
-		if (dif.y == 0) {	subRange = minmax(p.s.x, p.e.x); line = this.expandRow(new StringBuilder(board.split("/")[9 - p.e.y])).toString();}
-		else {				subRange = minmax(p.s.y, p.e.y); line = this.getBoardCollumn(board, p.s.x);	}
+		if (dif.y == 0) {	
+			subRange = minmax(p.s.x, p.e.x);
+			line = this.expandRow(new StringBuilder(board.split("/")[9 - p.e.y])).toString();}
+		else {
+			subRange = minmax(p.s.y, p.e.y);
+			line = this.getBoardCollumn(board, p.s.x);
+		}
 		line = line.substring(subRange.x, subRange.y + 1);
-		int figuresOnSubrange = this.countFigures(line);
-		if (!this.ownFigure(targetField))
-			if (this.charIsFigure(targetField)) {return figuresOnSubrange == 2; }// own figure + target figure
-			else { return figuresOnSubrange == 1;}	// own figure
+		int figuresOnSubrange = line.replaceAll("1", "").length();
+		
+		if (this.charIsFigure(targetField)) {return figuresOnSubrange == 2; }// own figure + target figure
+		else { 
+			return figuresOnSubrange == 1;}	// own figure
 			
-		return false;
+		
 	}
 }
